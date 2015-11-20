@@ -1,0 +1,5 @@
+CHANGELOG
+=========
+v0.1.00
+-------
+Added public registration with hook to homepage. No actions yet, but data can be collected
