@@ -32,21 +32,15 @@ catch(PDOException $e) {
 
 @session_start() ;
 
+$enableDescriptors=getSettingByScope($connection2, "Behaviour", "enableDescriptors") ;
+$enableLevels=getSettingByScope($connection2, "Behaviour", "enableLevels") ;
+
 //Set timezone from session variable
 date_default_timezone_set($_SESSION[$guid]["timezone"]);
 
-$URL=$_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/Alumni/publicRegistration.php" ;
+$URL=$_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . getModuleName($_POST["address"]) . "/alumni_manage_add.php&graduatingYear=" . $_GET["graduatingYear"] ;
 
-$proceed=FALSE ;
-
-if (isset($_SESSION[$guid]["username"])==FALSE) {
-	$enablePublicRegistration=getSettingByScope($connection2, 'Alumni', 'showPublicRegistration') ;
-	if ($enablePublicRegistration=="Y") {
-		$proceed=TRUE ;
-	}
-}
-
-if ($proceed==FALSE) {
+if (isActionAccessible($guid, $connection2, "/modules/Alumni/alumni_manage_add.php")==FALSE) {
 	//Fail 0
 	$URL.="&addReturn=fail0" ;
 	header("Location: {$URL}");
@@ -74,47 +68,29 @@ else {
 	$jobTitle=$_POST["jobTitle"] ;
 	$graduatingYear=$_POST["graduatingYear"] ;
 	
-	if ($surname=="" OR $firstName=="" OR $officialName=="" OR $gender=="" OR $dob=="" OR $email=="") {
+	if ($surname=="" OR $firstName=="" OR $gender=="" OR $email=="") {
 		//Fail 3
 		$URL.="&addReturn=fail3" ;
 		header("Location: {$URL}");
 	}
 	else {
-		//Check publicRegistrationMinimumAge
-		$publicRegistrationMinimumAge=getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge') ;
-
-		$ageFail=FALSE ;
-		if ($publicRegistrationMinimumAge=="") {
-			$ageFail=TRUE ;
+		//Write to database
+		try {
+			$data=array("title"=>$title, "surname"=>$surname, "firstName"=>$firstName, "officialName"=>$officialName, "maidenName"=>$maidenName, "gender"=>$gender, "username"=>$username, "dob"=>$dob, "email"=>$email, "address1Country"=>$address1Country, "profession"=>$profession, "employer"=>$employer, "jobTitle"=>$jobTitle, "graduatingYear"=>$graduatingYear); 
+			$sql="INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear" ;
+			$result=$connection2->prepare($sql);
+			$result->execute($data);
 		}
-		else if ($publicRegistrationMinimumAge>0 AND $publicRegistrationMinimumAge>getAge(dateConvertToTimestamp($dob), TRUE, TRUE)) {
-			$ageFail=TRUE ;
-		}
-	
-		if ($ageFail==TRUE) {
-			//Fail 5
-			$URL.="&addReturn=fail5" ;
+		catch(PDOException $e) { 
+			//Fail 2
+			$URL.="&addReturn=fail2" ;
 			header("Location: {$URL}");
+			break ;
 		}
-		else {		
-			//Write to database
-			try {
-				$data=array("title"=>$title, "surname"=>$surname, "firstName"=>$firstName, "officialName"=>$officialName, "maidenName"=>$maidenName, "gender"=>$gender, "username"=>$username, "dob"=>$dob, "email"=>$email, "address1Country"=>$address1Country, "profession"=>$profession, "employer"=>$employer, "jobTitle"=>$jobTitle, "graduatingYear"=>$graduatingYear); 
-				$sql="INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear" ;
-				$result=$connection2->prepare($sql);
-				$result->execute($data);
-			}
-			catch(PDOException $e) { 
-				//Fail 2
-				$URL.="&addReturn=fail2" ;
-				header("Location: {$URL}");
-				break ;
-			}
-				
-			//Success 0
-			$URL.="&addReturn=success0" ;
-			header("Location: {$URL}");
-		}
+			
+		//Success 0
+		$URL.="&addReturn=success0" ;
+		header("Location: {$URL}");
 	}
 }
 ?>

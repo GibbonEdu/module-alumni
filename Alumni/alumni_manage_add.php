@@ -19,28 +19,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 @session_start() ;
 
-$proceed=FALSE ;
+//Module includes
+include "./modules/" . $_SESSION[$guid]["module"] . "/moduleFunctions.php" ;
 
-if (isset($_SESSION[$guid]["username"])==FALSE) {
-	$enablePublicRegistration=getSettingByScope($connection2, 'Alumni', 'showPublicRegistration') ;
-	if ($enablePublicRegistration=="Y") {
-		$proceed=TRUE ;
-	}
-}
-
-if ($proceed==FALSE) {
+if (isActionAccessible($guid, $connection2, "/modules/Alumni/alumni_manage_add.php")==FALSE) {
 	//Acess denied
 	print "<div class='error'>" ;
 		print _("You do not have access to this action.") ;
 	print "</div>" ;
 }
 else {
-	//Proceed!
 	print "<div class='trail'>" ;
-		print "<div class='trailHead'><a href='" . $_SESSION[$guid]["absoluteURL"] . "'>" . _("Home") . "</a> > </div><div class='trailEnd'>" . $_SESSION[$guid]["organisationNameShort"] . " " . _('Alumni Registration') . "</div>" ;
+	print "<div class='trailHead'><a href='" . $_SESSION[$guid]["absoluteURL"] . "'>" . _("Home") . "</a> > <a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . getModuleName($_GET["q"]) . "/" . getModuleEntry($_GET["q"], $connection2, $guid) . "'>" . _(getModuleName($_GET["q"])) . "</a> > <a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/Alumni/alumni_manage.php'>" . _('Manage Alumni') . "</a> > </div><div class='trailEnd'>" . _('Add') . "</div>" ;
 	print "</div>" ;
-	
-	$publicRegistrationMinimumAge=getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge') ;
 	
 	if (isset($_GET["addReturn"])) { $addReturn=$_GET["addReturn"] ; } else { $addReturn="" ; }
 	$addReturnMessage="" ;
@@ -52,14 +43,25 @@ else {
 		else if ($addReturn=="fail2") {
 			$addReturnMessage=_("Your request failed due to a database error.") ;	
 		}
+		else if ($addReturn=="fail2a") {
+			$addReturnMessage=_("Your optional extra data failed to save.") ;	
+			$class="warning" ;
+		}
 		else if ($addReturn=="fail3") {
 			$addReturnMessage=_("Your request failed because your inputs were invalid.") ;	
 		}
+		else if ($addReturn=="fail4") {
+			$addReturnMessage=_("Your request failed because your inputs were invalid.") ;	
+		}
 		else if ($addReturn=="fail5") {
-			$addReturnMessage=sprintf(_('Your request failed because you do not meet the minimum age for joining this site (%1$s years of age).'), $publicRegistrationMinimumAge) ;	
+			$addReturnMessage=_("Your request was successful, but some data was not properly saved.") ;	
 		}
 		else if ($addReturn=="success0") {
-			$addReturnMessage=_("Your registration was successfully submitted: a member of our alumni team will be in touch shortly.") ;
+			$addReturnMessage=_("Your request was completed successfully. You can now add another record if you wish.") ;	
+			$class="success" ;
+		}
+		else if ($addReturn=="success1") {
+			$addReturnMessage=_("Your request was completed successfully. You can now add extra information below if you wish.") ;	
 			$class="success" ;
 		}
 		print "<div class='$class'>" ;
@@ -67,13 +69,26 @@ else {
 		print "</div>" ;
 	} 
 	
+	$alumniAlumnusID=NULL ;
+	if (isset($_GET["alumniAlumnusID"])) {
+		$alumniAlumnusID=$_GET["alumniAlumnusID"] ;
+	}
+	
+	print "<div class='linkTop'>" ;
+		$policyLink=getSettingByScope($connection2, "Behaviour", "policyLink") ;
+		if ($policyLink!="") {
+			print "<a target='_blank' href='$policyLink'>" . _('View Behaviour Policy') . "</a>" ;
+		}
+		if ($_GET["graduatingYear"]!="") {
+			if ($policyLink!="") {
+				print " | " ;
+			}
+			print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear=" . $_GET["graduatingYear"] . "'>" . _('Back to Search Results') . "</a>" ;
+		}
+	print "</div>" ;
 	?>
-	<p>
-		<?php
-		print sprintf(_('This registration form is for former members of the %1$s community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.'), $_SESSION[$guid]["organisationNameShort"]) ;
-		?>
-	</p>
-	<form method="post" action="<?php print $_SESSION[$guid]["absoluteURL"] . "/modules/Alumni/publicRegistrationProcess.php" ?>" enctype="multipart/form-data">
+
+	<form method="post" action="<?php print $_SESSION[$guid]["absoluteURL"] . "/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_addProcess.php?graduatingYear=" . $_GET["graduatingYear"] ?>">
 		<table class='smallIntBorder' cellspacing='0' style="width: 100%">	
 			<tr class='break'>
 				<th colspan=2> 
@@ -121,15 +136,11 @@ else {
 			</tr>
 			<tr>
 				<td> 
-					<b><?php print _('Official Name') ?> *</b><br/>
+					<b><?php print _('Official Name') ?></b><br/>
 					<span style="font-size: 90%"><i><?php print _('Full name as shown in ID documents.') ?></i></span>
 				</td>
 				<td class="right">
 					<input name="officialName" id="officialName" maxlength=150 value="" type="text" style="width: 300px">
-					<script type="text/javascript">
-						var officialName=new LiveValidation('officialName');
-						officialName.add(Validate.Presence);
-					</script>
 				</td>
 			</tr>
 			<tr>
@@ -166,17 +177,12 @@ else {
 			</tr>
 			<tr>
 				<td> 
-					<b><?php print _('Date of Birth') ?> *</b><br/>
+					<b><?php print _('Date of Birth') ?></b><br/>
 					<span style="font-size: 90%"><i><?php print _('Format:') . " " . $_SESSION[$guid]["i18n"]["dateFormat"]  ?></i></span>
 				</td>
 				<td class="right">
 					<input name="dob" id="dob" maxlength=10 value="" type="text" style="width: 300px">
 					<script type="text/javascript">
-						var dob=new LiveValidation('dob');
-						dob.add( Validate.Format, {pattern: <?php if ($_SESSION[$guid]["i18n"]["dateFormatRegEx"]=="") {  print "/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/i" ; } else { print $_SESSION[$guid]["i18n"]["dateFormatRegEx"] ; } ?>, failureMessage: "Use <?php if ($_SESSION[$guid]["i18n"]["dateFormat"]=="") { print "dd/mm/yyyy" ; } else { print $_SESSION[$guid]["i18n"]["dateFormat"] ; }?>." } ); 
-					 	dob.add(Validate.Presence);
-					</script>
-					 <script type="text/javascript">
 						$(function() {
 							$( "#dob" ).datepicker();
 						});
@@ -268,68 +274,17 @@ else {
 					<input name="jobTitle" id="jobTitle" maxlength=30 value="" type="text" style="width: 300px">
 				</td>
 			</tr>
-			
-			<?php
-			//Privacy statement
-			$privacyStatement=getSettingByScope($connection2, 'User Admin', 'publicRegistrationPrivacyStatement') ;
-			if ($privacyStatement!="") {
-				print "<tr class='break'>" ;
-					print "<th colspan=2>" ; 
-						print _("Privacy Statement") ;
-					print "</th>" ;
-				print "</tr>" ;
-				print "<tr>" ;
-					print "<td colspan=2>" ; 
-						print "<p>" ;
-							print $privacyStatement ;
-						print "</p>" ;
-					print "</td>" ;
-				print "</tr>" ;
-			}
-	
-			//Get agreement
-			$agreement=getSettingByScope($connection2, 'User Admin', 'publicRegistrationAgreement') ;
-			if ($agreement!="") {
-				print "<tr class='break'>" ;
-					print "<th colspan=2>" ; 
-						print _("Agreement") ;
-					print "</td>" ;
-				print "</tr>" ;
-				
-				print "<tr>" ;
-					print "<td colspan=2>" ; 
-						print $agreement ;
-					print "</td>" ;
-				print "</tr>" ;
-				print "<tr>" ;
-					print "<td>" ; 
-						print "<b>" . _('Do you agree to the above?') . "</b><br/>" ;
-					print "</td>" ;
-					print "<td class='right'>" ;
-						print "Yes <input type='checkbox' name='agreement' id='agreement'>" ;
-						?>
-						<script type="text/javascript">
-							var agreement=new LiveValidation('agreement');
-							agreement.add( Validate.Acceptance );
-						</script>
-						 <?php
-					print "</td>" ;
-				print "</tr>" ;
-			}
-			
-			?>
 			<tr>
 				<td>
 					<span style="font-size: 90%"><i>* <?php print _("denotes a required field") ; ?></i></span>
 				</td>
 				<td class="right">
 					<input type="hidden" name="address" value="<?php print $_SESSION[$guid]["address"] ?>">
-					<input type="submit" value="<?php print _("Submit") ; ?>">
+					<input type="submit" value="<?php print _('Submit') ?>">
 				</td>
 			</tr>
 		</table>
-	</form>	
-	
+	</form>
 	<?php
 }
 ?>

@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.2.00
+-------
+Added action to view and manage alumni data
+
 v0.1.00
 -------
 Added public registration with hook to homepage. No actions yet, but data can be collected
