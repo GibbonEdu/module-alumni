@@ -194,6 +194,25 @@ else {
 					</tr>
 					<tr>
 						<td> 
+							<b><?php print _('Main Role') ?> *</b><br/>
+							<span style="font-size: 90%"><i><?php print _('In what way, primarily, were you involved wiht the school?') ?></i></span>
+						</td>
+						<td class="right">
+							<select name="formerRole" id="formerRole" style="width: 302px">
+								<option value="Please select..."><?php print _('Please select...') ?></option>
+								<option <?php if ($row["formerRole"]=="Student") { print "selected" ; } ?> value="Student"><?php print _('Student') ?></option>
+								<option <?php if ($row["formerRole"]=="Staff") { print "selected" ; } ?> value="Staff"><?php print _('Staff') ?></option>
+								<option <?php if ($row["formerRole"]=="Parent") { print "selected" ; } ?> value="Parent"><?php print _('Parent') ?></option>
+								<option <?php if ($row["formerRole"]=="Other") { print "selected" ; } ?> value="Other"><?php print _('Other') ?></option>
+							</select>
+							<script type="text/javascript">
+								var formerRole=new LiveValidation('formerRole');
+								formerRole.add(Validate.Exclusion, { within: ['Please select...'], failureMessage: "<?php print _('Select something!') ?>"});
+							</script>
+						</td>
+					</tr>
+					<tr>
+						<td> 
 							<b><?php print _('Date of Birth') ?></b><br/>
 							<span style="font-size: 90%"><i><?php print _('Format:') . " " . $_SESSION[$guid]["i18n"]["dateFormat"]  ?></i></span>
 						</td>
@@ -297,6 +316,42 @@ else {
 						</td>
 						<td class="right">
 							<input name="jobTitle" id="jobTitle" maxlength=30 value="<?php print htmlPrep($row["jobTitle"])?>" type="text" style="width: 300px">
+						</td>
+					</tr>
+					
+					<tr class='break'>
+						<th colspan=2> 
+							<?php print _("Link To Gibbon User") ; ?>
+						</td>
+					</tr>
+					<tr>
+						<td> 
+							<b><?php print _('Existing User') ?></b><br/>
+						</td>
+						<td class="right">
+							<select name="gibbonPersonID" id="gibbonPersonID" style="width: 302px">
+								<?php
+								print "<option value=''></option>" ;
+								try {
+									$dataSelect=array(); 
+									$sqlSelect="SELECT gibbonPersonID, surname, preferredName, dob, username FROM gibbonPerson ORDER BY surname, preferredName" ;
+									$resultSelect=$connection2->prepare($sqlSelect);
+									$resultSelect->execute($dataSelect);
+								}
+								catch(PDOException $e) { print "error" . $e->getMessage() ; }
+								while ($rowSelect=$resultSelect->fetch()) {
+									$selected="" ;
+									if ($row["gibbonPersonID"]==$rowSelect["gibbonPersonID"]) {
+										$selected="selected" ;
+									}
+									print "<option $selected value='" . $rowSelect["gibbonPersonID"] . "'>" . formatName("", $rowSelect["preferredName"], $rowSelect["surname"], "Student", TRUE) . " (" . $rowSelect["username"] ;
+									if ($rowSelect["dob"]!="") {
+										print  " | " . dateConvertBack($guid, $rowSelect["dob"]) ;
+									}
+									print ")</option>" ;
+								}
+								?>				
+							</select>
 						</td>
 					</tr>
 

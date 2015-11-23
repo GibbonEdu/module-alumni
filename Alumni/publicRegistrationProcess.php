@@ -73,8 +73,9 @@ else {
 	$employer=$_POST["employer"] ;
 	$jobTitle=$_POST["jobTitle"] ;
 	$graduatingYear=$_POST["graduatingYear"] ;
+	$formerRole=$_POST["formerRole"] ;
 	
-	if ($surname=="" OR $firstName=="" OR $officialName=="" OR $gender=="" OR $dob=="" OR $email=="") {
+	if ($surname=="" OR $firstName=="" OR $officialName=="" OR $gender=="" OR $dob=="" OR $email=="" OR $formerRole=="") {
 		//Fail 3
 		$URL.="&addReturn=fail3" ;
 		header("Location: {$URL}");
@@ -99,8 +100,8 @@ else {
 		else {		
 			//Write to database
 			try {
-				$data=array("title"=>$title, "surname"=>$surname, "firstName"=>$firstName, "officialName"=>$officialName, "maidenName"=>$maidenName, "gender"=>$gender, "username"=>$username, "dob"=>$dob, "email"=>$email, "address1Country"=>$address1Country, "profession"=>$profession, "employer"=>$employer, "jobTitle"=>$jobTitle, "graduatingYear"=>$graduatingYear); 
-				$sql="INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear" ;
+				$data=array("title"=>$title, "surname"=>$surname, "firstName"=>$firstName, "officialName"=>$officialName, "maidenName"=>$maidenName, "gender"=>$gender, "username"=>$username, "dob"=>$dob, "email"=>$email, "address1Country"=>$address1Country, "profession"=>$profession, "employer"=>$employer, "jobTitle"=>$jobTitle, "graduatingYear"=>$graduatingYear, "formerRole"=>$formerRole); 
+				$sql="INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear, formerRole=:formerRole" ;
 				$result=$connection2->prepare($sql);
 				$result->execute($data);
 			}

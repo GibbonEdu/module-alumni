@@ -166,6 +166,25 @@ else {
 			</tr>
 			<tr>
 				<td> 
+					<b><?php print _('Main Role') ?> *</b><br/>
+					<span style="font-size: 90%"><i><?php print _('In what way, primarily, were you involved wiht the school?') ?></i></span>
+				</td>
+				<td class="right">
+					<select name="formerRole" id="formerRole" style="width: 302px">
+						<option value="Please select..."><?php print _('Please select...') ?></option>
+						<option value="Student"><?php print _('Student') ?></option>
+						<option value="Staff"><?php print _('Staff') ?></option>
+						<option value="Parent"><?php print _('Parent') ?></option>
+						<option value="Other"><?php print _('Other') ?></option>
+					</select>
+					<script type="text/javascript">
+						var formerRole=new LiveValidation('formerRole');
+						formerRole.add(Validate.Exclusion, { within: ['Please select...'], failureMessage: "<?php print _('Select something!') ?>"});
+					</script>
+				</td>
+			</tr>
+			<tr>
+				<td> 
 					<b><?php print _('Date of Birth') ?> *</b><br/>
 					<span style="font-size: 90%"><i><?php print _('Format:') . " " . $_SESSION[$guid]["i18n"]["dateFormat"]  ?></i></span>
 				</td>

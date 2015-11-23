@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+v0.3.00
+-------
+Added ability to link an alumni profile to an existing user of the system
+Added role (category) to alumni profile
+
 v0.2.00
 -------
 Added action to view and manage alumni data

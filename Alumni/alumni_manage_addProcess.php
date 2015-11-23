@@ -66,9 +66,17 @@ else {
 	$profession=$_POST["profession"] ;
 	$employer=$_POST["employer"] ;
 	$jobTitle=$_POST["jobTitle"] ;
-	$graduatingYear=$_POST["graduatingYear"] ;
+	$graduatingYear=NULL ;
+	if ($_POST["graduatingYear"]!="") {
+		$graduatingYear=$_POST["graduatingYear"] ;
+	}
+	$formerRole=$_POST["formerRole"] ;
+	$gibbonPersonID=NULL ;
+	if ($_POST["gibbonPersonID"]!="") {
+		$gibbonPersonID=$_POST["gibbonPersonID"] ;
+	}
 	
-	if ($surname=="" OR $firstName=="" OR $gender=="" OR $email=="") {
+	if ($surname=="" OR $firstName=="" OR $gender=="" OR $email=="" OR $formerRole=="") {
 		//Fail 3
 		$URL.="&addReturn=fail3" ;
 		header("Location: {$URL}");
@@ -76,8 +84,8 @@ else {
 	else {
 		//Write to database
 		try {
-			$data=array("title"=>$title, "surname"=>$surname, "firstName"=>$firstName, "officialName"=>$officialName, "maidenName"=>$maidenName, "gender"=>$gender, "username"=>$username, "dob"=>$dob, "email"=>$email, "address1Country"=>$address1Country, "profession"=>$profession, "employer"=>$employer, "jobTitle"=>$jobTitle, "graduatingYear"=>$graduatingYear); 
-			$sql="INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear" ;
+			$data=array("title"=>$title, "surname"=>$surname, "firstName"=>$firstName, "officialName"=>$officialName, "maidenName"=>$maidenName, "gender"=>$gender, "username"=>$username, "dob"=>$dob, "email"=>$email, "address1Country"=>$address1Country, "profession"=>$profession, "employer"=>$employer, "jobTitle"=>$jobTitle, "graduatingYear"=>$graduatingYear, "formerRole"=>$formerRole, "gibbonPersonID"=>$gibbonPersonID); 
+			$sql="INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear, formerRole=:formerRole, gibbonPersonID=:gibbonPersonID" ;
 			$result=$connection2->prepare($sql);
 			$result->execute($data);
 		}
