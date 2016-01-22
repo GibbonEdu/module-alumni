@@ -8,7 +8,7 @@ $count=0 ;
 $sql[$count][0]="0.1.00" ;
 $sql[$count][1]="" ;
 
-//v0.2.00 - DOES NOT EXIST, JUST GETTING READY FOR AWESOMENESS TO COME
+//v0.2.00
 $count++ ;
 $sql[$count][0]="0.2.00" ;
 $sql[$count][1]="
@@ -18,11 +18,16 @@ ALTER TABLE `alumniAlumnus` CHANGE `graduatingYear` `graduatingYear` INT(4) NULL
 UPDATE alumniAlumnus SET graduatingYear=NULL WHERE graduatingYear=0;end
 " ;
 
-//v0.2.00 - DOES NOT EXIST, JUST GETTING READY FOR AWESOMENESS TO COME
+//v0.3.00
 $count++ ;
 $sql[$count][0]="0.3.00" ;
 $sql[$count][1]="
 ALTER TABLE `alumniAlumnus` ADD `formerRole` ENUM('Staff','Student','Parent','Other') NULL DEFAULT NULL AFTER `graduatingYear`, ADD `gibbonPersonID` INT(10) NULL DEFAULT NULL AFTER `formerRole`;end
 " ;
+
+//v0.3.01
+$count++ ;
+$sql[$count][0]="0.3.01" ;
+$sql[$count][1]="" ;
 
 ?>

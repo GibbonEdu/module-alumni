@@ -178,7 +178,7 @@ else {
 			<tr>
 				<td> 
 					<b><?php print _('Main Role') ?> *</b><br/>
-					<span style="font-size: 90%"><i><?php print _('In what way, primarily, were you involved wiht the school?') ?></i></span>
+					<span style="font-size: 90%"><i><?php print _('In what way, primarily, were you involved with the school?') ?></i></span>
 				</td>
 				<td class="right">
 					<select name="formerRole" id="formerRole" style="width: 302px">
