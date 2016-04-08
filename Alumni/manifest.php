@@ -25,7 +25,7 @@ $description="The Alumni module allows schools to accept alumni registrations, a
 $entryURL="alumni_manage.php" ;
 $type="Additional" ;
 $category="People" ;
-$version="0.3.01" ;
+$version="0.3.02" ;
 $author="Ross Parker" ;
 $url="http://rossparker.org/free-learning" ;
 
@@ -36,6 +36,7 @@ $moduleTables[0]="CREATE TABLE `alumniAlumnus` (  `alumniAlumnusID` int(10) unsi
 
 //Settings
 $gibbonSetting[0]="INSERT INTO `gibbonSetting` (`gibbonSystemSettingsID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'showPublicRegistration', 'Show Public Registration', 'Should the alumni registration form be displayed on the school\'s Gibbon homepage, or available via a link only?.', 'Y');";
+$gibbonSetting[1]="INSERT INTO `gibbonSetting` (`gibbonSystemSettingsID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'facebookLink', 'Facebook Link', 'A URL pointing to a Facebook page for the school\'s alumni group.', '');";
 
 
 //Action rows

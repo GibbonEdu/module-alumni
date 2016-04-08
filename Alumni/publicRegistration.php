@@ -71,6 +71,10 @@ else {
 	<p>
 		<?php
 		print sprintf(_('This registration form is for former members of the %1$s community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.'), $_SESSION[$guid]["organisationNameShort"]) ;
+		$facebookLink=getSettingByScope($connection2, "Alumni", "facebookLink") ;
+		if ($facebookLink!="") {
+		 print " " . sprintf(_('Please don\'t forget to take a look at, and like, our alumni %1$sFacebook page%2$s.'), "<a href='" . htmlPrep($facebookLink) . "' target='_blank'>" , "</a>") ;
+		}
 		?>
 	</p>
 	<form method="post" action="<?php print $_SESSION[$guid]["absoluteURL"] . "/modules/Alumni/publicRegistrationProcess.php" ?>" enctype="multipart/form-data">

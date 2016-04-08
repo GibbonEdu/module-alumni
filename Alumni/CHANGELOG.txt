@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.3.02
+-------
+Added setting/link to Facebook page. Setting is database only, no interface.
+
 v0.3.01
 -------
 Fixed minor spelling mistake
