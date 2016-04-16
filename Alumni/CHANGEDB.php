@@ -35,4 +35,10 @@ $count++ ;
 $sql[$count][0]="0.3.02" ;
 $sql[$count][1]="INSERT INTO `gibbonSetting` (`gibbonSystemSettingsID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'facebookLink', 'Facebook Link', 'A URL pointing to a Facebook page for the school\'s alumni group.', '');" ;
 
+//v0.3.03
+$count++ ;
+$sql[$count][0]="0.3.03" ;
+$sql[$count][1]="" ;
+
+
 ?>

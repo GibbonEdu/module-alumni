@@ -25,7 +25,7 @@ $description="The Alumni module allows schools to accept alumni registrations, a
 $entryURL="alumni_manage.php" ;
 $type="Additional" ;
 $category="People" ;
-$version="0.3.02" ;
+$version="0.3.03" ;
 $author="Ross Parker" ;
 $url="http://rossparker.org/free-learning" ;
 

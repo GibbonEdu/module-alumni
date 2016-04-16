@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.3.03
+-------
+Gibbon Core v12 & PHP 7 Compatibility 
+
 v0.3.02
 -------
 Added setting/link to Facebook page. Setting is database only, no interface.

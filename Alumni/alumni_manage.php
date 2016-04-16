@@ -25,12 +25,12 @@ include "./modules/" . $_SESSION[$guid]["module"] . "/moduleFunctions.php" ;
 if (isActionAccessible($guid, $connection2, "/modules/Alumni/alumni_manage.php")==FALSE) {
 	//Acess denied
 	print "<div class='error'>" ;
-		print _("You do not have access to this action.") ;
+		print __($guid, "You do not have access to this action.") ;
 	print "</div>" ;
 }
 else {
 	print "<div class='trail'>" ;
-	print "<div class='trailHead'><a href='" . $_SESSION[$guid]["absoluteURL"] . "'>" . _("Home") . "</a> > <a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . getModuleName($_GET["q"]) . "/" . getModuleEntry($_GET["q"], $connection2, $guid) . "'>" . _(getModuleName($_GET["q"])) . "</a> > </div><div class='trailEnd'>" . _('Manage Alumni') . "</div>" ;
+	print "<div class='trailHead'><a href='" . $_SESSION[$guid]["absoluteURL"] . "'>" . __($guid, "Home") . "</a> > <a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . getModuleName($_GET["q"]) . "/" . getModuleEntry($_GET["q"], $connection2, $guid) . "'>" . __($guid, getModuleName($_GET["q"])) . "</a> > </div><div class='trailEnd'>" . __($guid, 'Manage Alumni') . "</div>" ;
 	print "</div>" ;
 	
 	if (isset($_GET["deleteReturn"])) { $deleteReturn=$_GET["deleteReturn"] ; } else { $deleteReturn="" ; }
@@ -38,7 +38,7 @@ else {
 	$class="error" ;
 	if (!($deleteReturn=="")) {
 		if ($deleteReturn=="success0") {
-			$deleteReturnMessage=_("Your request was completed successfully.") ;		
+			$deleteReturnMessage=__($guid, "Your request was completed successfully.") ;		
 			$class="success" ;
 		}
 		print "<div class='$class'>" ;
@@ -52,14 +52,14 @@ else {
 	}
 	
 	print "<h3>" ;
-		print _("Filter") ;
+		print __($guid, "Filter") ;
 	print "</h3>" ;
 	print "<form method='get' action='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/Alumni/alumni_manage.php'>" ;
 		print "<table class='noIntBorder' cellspacing='0' style='width: 100%'>" ;
 			?>
 			<tr>
 				<td> 
-					<b><?php print _('Graduating Year') ?></b><br/>
+					<b><?php print __($guid, 'Graduating Year') ?></b><br/>
 					<span style="font-size: 90%"><i></i></span>
 				</td>
 				<td class="right">
@@ -78,8 +78,8 @@ else {
 			print "<tr>" ;
 				print "<td class='right' colspan=2>" ;
 					print "<input type='hidden' name='q' value='" . $_GET["q"] . "'>" ;
-					print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/Alumni/alumni_manage.php'>" . _('Clear Filters') . "</a> " ;
-					print "<input type='submit' value='" . _('Go') . "'>" ;
+					print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/Alumni/alumni_manage.php'>" . __($guid, 'Clear Filters') . "</a> " ;
+					print "<input type='submit' value='" . __($guid, 'Go') . "'>" ;
 				print "</td>" ;
 			print "</tr>" ;
 		print "</table>" ;
@@ -87,7 +87,7 @@ else {
 	
 	
 	print "<h3>" ;
-		print _("Behaviour Records") ;
+		print __($guid, "Behaviour Records") ;
 	print "</h3>" ;
 	//Set pagination variable
 	$page=1 ; if (isset($_GET["page"])) { $page=$_GET["page"] ; }
@@ -119,12 +119,12 @@ else {
 	$sqlPage=$sql . " LIMIT " . $_SESSION[$guid]["pagination"] . " OFFSET " . (($page-1)*$_SESSION[$guid]["pagination"]) ;
 	
 	print "<div class='linkTop'>" ;
-		print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_add.php&graduatingYear=$graduatingYear'>" . _('Add') . "<img style='margin: 0 0 -4px 5px' title='" . _('Add') . "' src='./themes/" . $_SESSION[$guid]["gibbonThemeName"] . "/img/page_new.png'/></a>" ;
+		print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_add.php&graduatingYear=$graduatingYear'>" . __($guid, 'Add') . "<img style='margin: 0 0 -4px 5px' title='" . __($guid, 'Add') . "' src='./themes/" . $_SESSION[$guid]["gibbonThemeName"] . "/img/page_new.png'/></a>" ;
 	print "</div>" ;
 	
 	if ($result->rowCount()<1) {
 		print "<div class='error'>" ;
-		print _("There are no records to display.") ;
+		print __($guid, "There are no records to display.") ;
 		print "</div>" ;
 	}
 	else {
@@ -135,16 +135,16 @@ else {
 		print "<table cellspacing='0' style='width: 100%'>" ;
 			print "<tr class='head'>" ;
 				print "<th>" ;
-					print _("Name") ;
+					print __($guid, "Name") ;
 				print "</th>" ;
 				print "<th>" ;
-					print _("Email") ;
+					print __($guid, "Email") ;
 				print "</th>" ;
 				print "<th>" ;
-					print _("Graduating Year") ;
+					print __($guid, "Graduating Year") ;
 				print "</th>" ;
 				print "<th style='min-width: 70px'>" ;
-					print _("Actions") ;
+					print __($guid, "Actions") ;
 				print "</th>" ;
 			print "</tr>" ;
 			
@@ -178,8 +178,8 @@ else {
 						print $row["graduatingYear"] ;
 					print "</td>" ;
 					print "<td>" ;
-						print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_edit.php&alumniAlumnusID=" . $row["alumniAlumnusID"] . "&graduatingYear=$graduatingYear'><img title='" . _('Edit') . "' src='./themes/" . $_SESSION[$guid]["gibbonThemeName"] . "/img/config.png'/></a> " ;
-						print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_delete.php&alumniAlumnusID=" . $row["alumniAlumnusID"] . "&graduatingYear=$graduatingYear'><img title='" . _('Delete') . "' src='./themes/" . $_SESSION[$guid]["gibbonThemeName"] . "/img/garbage.png'/></a> " ;
+						print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_edit.php&alumniAlumnusID=" . $row["alumniAlumnusID"] . "&graduatingYear=$graduatingYear'><img title='" . __($guid, 'Edit') . "' src='./themes/" . $_SESSION[$guid]["gibbonThemeName"] . "/img/config.png'/></a> " ;
+						print "<a href='" . $_SESSION[$guid]["absoluteURL"] . "/index.php?q=/modules/" . $_SESSION[$guid]["module"] . "/alumni_manage_delete.php&alumniAlumnusID=" . $row["alumniAlumnusID"] . "&graduatingYear=$graduatingYear'><img title='" . __($guid, 'Delete') . "' src='./themes/" . $_SESSION[$guid]["gibbonThemeName"] . "/img/garbage.png'/></a> " ;
 						print "<script type='text/javascript'>" ;	
 							print "$(document).ready(function(){" ;
 								print "\$(\".comment-$count\").hide();" ;
@@ -189,25 +189,25 @@ else {
 								print "});" ;
 							print "});" ;
 						print "</script>" ;
-						print "<a title='" . _('View Details') . "' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='" . $_SESSION[$guid]["absoluteURL"] . "/themes/Default/img/page_down.png' alt='" . _('View Details') . "' onclick='return false;' /></a>" ;
+						print "<a title='" . __($guid, 'View Details') . "' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='" . $_SESSION[$guid]["absoluteURL"] . "/themes/Default/img/page_down.png' alt='" . __($guid, 'View Details') . "' onclick='return false;' /></a>" ;
 					print "</td>" ;
 				print "</tr>" ;
 				print "<tr class='comment-$count' id='comment-$count'>" ;
 					print "<td colspan=4>" ;
-						print "<b>" . _('Official Name') . ": </b>" . $row["officialName"] . "<br/>" ;
-						print "<b>" . _('Maiden Name') . ": </b>" . $row["maidenName"] . "<br/>" ;
-						print "<b>" . _('Gender') . ": </b>" . $row["gender"] . "<br/>" ;
-						print "<b>" . _('Username') . ": </b>" . $row["username"] . "<br/>" ;
-						print "<b>" . _('Date Of Birth') . ": </b>" ;
+						print "<b>" . __($guid, 'Official Name') . ": </b>" . $row["officialName"] . "<br/>" ;
+						print "<b>" . __($guid, 'Maiden Name') . ": </b>" . $row["maidenName"] . "<br/>" ;
+						print "<b>" . __($guid, 'Gender') . ": </b>" . $row["gender"] . "<br/>" ;
+						print "<b>" . __($guid, 'Username') . ": </b>" . $row["username"] . "<br/>" ;
+						print "<b>" . __($guid, 'Date Of Birth') . ": </b>" ;
 						if ($row["dob"]!="") {
 							print dateConvertBack($guid, $row["dob"]) ;
 						}
 						print "<br/>" ;
-						print "<b>" . _('Country of Residence') . ": </b>" . $row["address1Country"] . "<br/>" ;
-						print "<b>" . _('Profession') . ": </b>" . $row["profession"] . "<br/>" ;
-						print "<b>" . _('Employer') . ": </b>" . $row["employer"] . "<br/>" ;
-						print "<b>" . _('Job Title') . ": </b>" . $row["jobTitle"] . "<br/>" ;
-						print "<b>" . _('Date Joined') . ": </b>" ;
+						print "<b>" . __($guid, 'Country of Residence') . ": </b>" . $row["address1Country"] . "<br/>" ;
+						print "<b>" . __($guid, 'Profession') . ": </b>" . $row["profession"] . "<br/>" ;
+						print "<b>" . __($guid, 'Employer') . ": </b>" . $row["employer"] . "<br/>" ;
+						print "<b>" . __($guid, 'Job Title') . ": </b>" . $row["jobTitle"] . "<br/>" ;
+						print "<b>" . __($guid, 'Date Joined') . ": </b>" ;
 						if ($row["timestamp"]!="") {
 							print dateConvertBack($guid, substr($row["timestamp"], 0, 10)) ;
 						}
