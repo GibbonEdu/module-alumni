@@ -87,7 +87,7 @@ else {
 	
 	
 	print "<h3>" ;
-		print __($guid, "Behaviour Records") ;
+		print __($guid, "View Records") ;
 	print "</h3>" ;
 	//Set pagination variable
 	$page=1 ; if (isset($_GET["page"])) { $page=$_GET["page"] ; }
