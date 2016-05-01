@@ -1,12 +1,18 @@
 CHANGELOG
 =========
+v0.3.05
+-------
+Beautified PHP code
+Improved error handling
+Edit link added to add return
+
 v0.3.04
 -------
-Fixed interface string error 
+Fixed interface string error
 
 v0.3.03
 -------
-Gibbon Core v12 & PHP 7 Compatibility 
+Gibbon Core v12 & PHP 7 Compatibility
 
 v0.3.02
 -------
