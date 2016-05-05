@@ -45,8 +45,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
         $alumniAlumnusID = $_GET['alumniAlumnusID'];
     }
 
-    if ($_GET['graduatingYear'] != '') {
-        echo "<div class='linkTop'>";
+    if ($_GET['graduatingYear'] != '') { echo "<div class='linkTop'>";
           echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$_GET['graduatingYear']."'>".__($guid, 'Back to Search Results').'</a>';
         echo '</div>';
     }
@@ -56,8 +55,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 		<table class='smallIntBorder' cellspacing='0' style="width: 100%">
 			<tr class='break'>
 				<th colspan=2>
-					<?php echo __($guid, 'Personal Details');
-    ?>
+					<?php echo __($guid, 'Personal Details'); ?>
 				</td>
 			</tr>
 			<tr>
@@ -176,8 +174,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 
 			<tr class='break'>
 				<th colspan=2>
-					<?php echo __($guid, 'Tell Us More About Yourself');
-    ?>
+					<?php echo __($guid, 'Tell Us More About Yourself'); ?>
 				</td>
 			</tr>
 			<tr>
@@ -206,10 +203,10 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 					<select name="graduatingYear" id="graduatingYear" style="width: 302px">
 						<?php
                         echo "<option value=''></option>";
-    for ($i = date('Y'); $i > (date('Y') - 200); --$i) {
-        echo "<option value='$i'>$i</option>";
-    }
-    ?>
+						for ($i = date('Y'); $i > (date('Y') - 200); --$i) {
+							echo "<option value='$i'>$i</option>";
+						}
+						?>
 					</select>
 				</td>
 			</tr>
@@ -221,17 +218,17 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 					<select name="address1Country" id="address1Country" style="width: 302px">
 						<?php
                         echo "<option value=''></option>";
-    try {
-        $dataSelect = array();
-        $sqlSelect = 'SELECT printable_name FROM gibbonCountry ORDER BY printable_name';
-        $resultSelect = $connection2->prepare($sqlSelect);
-        $resultSelect->execute($dataSelect);
-    } catch (PDOException $e) {
-    }
-    while ($rowSelect = $resultSelect->fetch()) {
-        echo "<option value='".$rowSelect['printable_name']."'>".htmlPrep(__($guid, $rowSelect['printable_name'])).'</option>';
-    }
-    ?>
+						try {
+							$dataSelect = array();
+							$sqlSelect = 'SELECT printable_name FROM gibbonCountry ORDER BY printable_name';
+							$resultSelect = $connection2->prepare($sqlSelect);
+							$resultSelect->execute($dataSelect);
+						} catch (PDOException $e) {
+						}
+						while ($rowSelect = $resultSelect->fetch()) {
+							echo "<option value='".$rowSelect['printable_name']."'>".htmlPrep(__($guid, $rowSelect['printable_name'])).'</option>';
+						}
+						?>
 					</select>
 				</td>
 			</tr>
@@ -262,8 +259,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 
 			<tr class='break'>
 				<th colspan=2>
-					<?php echo __($guid, 'Link To Gibbon User');
-    ?>
+					<?php echo __($guid, 'Link To Gibbon User'); ?>
 				</td>
 			</tr>
 			<tr>
@@ -274,30 +270,29 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 					<select name="gibbonPersonID" id="gibbonPersonID" style="width: 302px">
 						<?php
                         echo "<option value=''></option>";
-    try {
-        $dataSelect = array();
-        $sqlSelect = 'SELECT gibbonPersonID, surname, preferredName, dob, username FROM gibbonPerson ORDER BY surname, preferredName';
-        $resultSelect = $connection2->prepare($sqlSelect);
-        $resultSelect->execute($dataSelect);
-    } catch (PDOException $e) {
-        echo 'error'.$e->getMessage();
-    }
-    while ($rowSelect = $resultSelect->fetch()) {
-        echo "<option value='".$rowSelect['gibbonPersonID']."'>".formatName('', $rowSelect['preferredName'], $rowSelect['surname'], 'Student', true).' ('.$rowSelect['username'];
-        if ($rowSelect['dob'] != '') {
-            echo  ' | '.dateConvertBack($guid, $rowSelect['dob']);
-        }
-        echo ')</option>';
-    }
-    ?>
+						try {
+							$dataSelect = array();
+							$sqlSelect = 'SELECT gibbonPersonID, surname, preferredName, dob, username FROM gibbonPerson ORDER BY surname, preferredName';
+							$resultSelect = $connection2->prepare($sqlSelect);
+							$resultSelect->execute($dataSelect);
+						} catch (PDOException $e) {
+							echo 'error'.$e->getMessage();
+						}
+						while ($rowSelect = $resultSelect->fetch()) {
+							echo "<option value='".$rowSelect['gibbonPersonID']."'>".formatName('', $rowSelect['preferredName'], $rowSelect['surname'], 'Student', true).' ('.$rowSelect['username'];
+							if ($rowSelect['dob'] != '') {
+								echo  ' | '.dateConvertBack($guid, $rowSelect['dob']);
+							}
+							echo ')</option>';
+						}
+						?>
 					</select>
 				</td>
 			</tr>
 
 			<tr>
 				<td>
-					<span style="font-size: 90%"><i>* <?php echo __($guid, 'denotes a required field');
-    ?></i></span>
+					<span style="font-size: 90%"><i>* <?php echo __($guid, 'denotes a required field'); ?></i></span>
 				</td>
 				<td class="right">
 					<input type="hidden" name="address" value="<?php echo $_SESSION[$guid]['address'] ?>">

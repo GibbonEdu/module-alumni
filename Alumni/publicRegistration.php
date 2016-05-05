@@ -66,7 +66,7 @@ if ($proceed == false) {
 			<tr class='break'>
 				<th colspan=2>
 					<?php echo __($guid, 'Personal Details');
-    ?>
+    				?>
 				</td>
 			</tr>
 			<tr>
@@ -182,16 +182,16 @@ if ($proceed == false) {
 					<script type="text/javascript">
 						var dob=new LiveValidation('dob');
 						dob.add( Validate.Format, {pattern: <?php if ($_SESSION[$guid]['i18n']['dateFormatRegEx'] == '') {
-    echo "/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/i";
-} else {
-    echo $_SESSION[$guid]['i18n']['dateFormatRegEx'];
-}
-    ?>, failureMessage: "Use <?php if ($_SESSION[$guid]['i18n']['dateFormat'] == '') {
-    echo 'dd/mm/yyyy';
-} else {
-    echo $_SESSION[$guid]['i18n']['dateFormat'];
-}
-    ?>." } );
+							echo "/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/i";
+						} else {
+							echo $_SESSION[$guid]['i18n']['dateFormatRegEx'];
+						}
+							?>, failureMessage: "Use <?php if ($_SESSION[$guid]['i18n']['dateFormat'] == '') {
+							echo 'dd/mm/yyyy';
+						} else {
+							echo $_SESSION[$guid]['i18n']['dateFormat'];
+						}
+						?>." } );
 					 	dob.add(Validate.Presence);
 					</script>
 					 <script type="text/javascript">
@@ -205,7 +205,7 @@ if ($proceed == false) {
 			<tr class='break'>
 				<th colspan=2>
 					<?php echo __($guid, 'Tell Us More About Yourself');
-    ?>
+    				?>
 				</td>
 			</tr>
 			<tr>
@@ -234,10 +234,10 @@ if ($proceed == false) {
 					<select name="graduatingYear" id="graduatingYear" style="width: 302px">
 						<?php
                         echo "<option value=''></option>";
-    for ($i = date('Y'); $i > (date('Y') - 200); --$i) {
-        echo "<option value='$i'>$i</option>";
-    }
-    ?>
+						for ($i = date('Y'); $i > (date('Y') - 200); --$i) {
+							echo "<option value='$i'>$i</option>";
+						}
+						?>
 					</select>
 				</td>
 			</tr>
@@ -249,17 +249,17 @@ if ($proceed == false) {
 					<select name="address1Country" id="address1Country" style="width: 302px">
 						<?php
                         echo "<option value=''></option>";
-    try {
-        $dataSelect = array();
-        $sqlSelect = 'SELECT printable_name FROM gibbonCountry ORDER BY printable_name';
-        $resultSelect = $connection2->prepare($sqlSelect);
-        $resultSelect->execute($dataSelect);
-    } catch (PDOException $e) {
-    }
-    while ($rowSelect = $resultSelect->fetch()) {
-        echo "<option value='".$rowSelect['printable_name']."'>".htmlPrep(__($guid, $rowSelect['printable_name'])).'</option>';
-    }
-    ?>
+						try {
+							$dataSelect = array();
+							$sqlSelect = 'SELECT printable_name FROM gibbonCountry ORDER BY printable_name';
+							$resultSelect = $connection2->prepare($sqlSelect);
+							$resultSelect->execute($dataSelect);
+						} catch (PDOException $e) {
+						}
+						while ($rowSelect = $resultSelect->fetch()) {
+							echo "<option value='".$rowSelect['printable_name']."'>".htmlPrep(__($guid, $rowSelect['printable_name'])).'</option>';
+						}
+						?>
 					</select>
 				</td>
 			</tr>
@@ -291,61 +291,59 @@ if ($proceed == false) {
 			<?php
             //Privacy statement
             $privacyStatement = getSettingByScope($connection2, 'User Admin', 'publicRegistrationPrivacyStatement');
-    if ($privacyStatement != '') {
-        echo "<tr class='break'>";
-        echo '<th colspan=2>';
-        echo __($guid, 'Privacy Statement');
-        echo '</th>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<td colspan=2>';
-        echo '<p>';
-        echo $privacyStatement;
-        echo '</p>';
-        echo '</td>';
-        echo '</tr>';
-    }
+			if ($privacyStatement != '') {
+				echo "<tr class='break'>";
+				echo '<th colspan=2>';
+				echo __($guid, 'Privacy Statement');
+				echo '</th>';
+				echo '</tr>';
+				echo '<tr>';
+				echo '<td colspan=2>';
+				echo '<p>';
+				echo $privacyStatement;
+				echo '</p>';
+				echo '</td>';
+				echo '</tr>';
+			}
 
             //Get agreement
             $agreement = getSettingByScope($connection2, 'User Admin', 'publicRegistrationAgreement');
-    if ($agreement != '') {
-        echo "<tr class='break'>";
-        echo '<th colspan=2>';
-        echo __($guid, 'Agreement');
-        echo '</td>';
-        echo '</tr>';
+			if ($agreement != '') {
+				echo "<tr class='break'>";
+				echo '<th colspan=2>';
+				echo __($guid, 'Agreement');
+				echo '</td>';
+				echo '</tr>';
 
-        echo '<tr>';
-        echo '<td colspan=2>';
-        echo $agreement;
-        echo '</td>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<td>';
-        echo '<b>'.__($guid, 'Do you agree to the above?').'</b><br/>';
-        echo '</td>';
-        echo "<td class='right'>";
-        echo "Yes <input type='checkbox' name='agreement' id='agreement'>";
-        ?>
-						<script type="text/javascript">
-							var agreement=new LiveValidation('agreement');
-							agreement.add( Validate.Acceptance );
-						</script>
-						 <?php
-                    echo '</td>';
+				echo '<tr>';
+				echo '<td colspan=2>';
+				echo $agreement;
+				echo '</td>';
+				echo '</tr>';
+				echo '<tr>';
+				echo '<td>';
+				echo '<b>'.__($guid, 'Do you agree to the above?').'</b><br/>';
+				echo '</td>';
+				echo "<td class='right'>";
+				echo "Yes <input type='checkbox' name='agreement' id='agreement'>";
+				?>
+				<script type="text/javascript">
+					var agreement=new LiveValidation('agreement');
+					agreement.add( Validate.Acceptance );
+				</script>
+				 <?php
+			echo '</td>';
         echo '</tr>';
     }
 
     ?>
-			<tr>
-				<td>
-					<span style="font-size: 90%"><i>* <?php echo __($guid, 'denotes a required field');
-    ?></i></span>
+	<tr>
+		<td>
+			<span style="font-size: 90%"><i>* <?php echo __($guid, 'denotes a required field'); ?></i></span>
 				</td>
 				<td class="right">
 					<input type="hidden" name="address" value="<?php echo $_SESSION[$guid]['address'] ?>">
-					<input type="submit" value="<?php echo __($guid, 'Submit');
-    ?>">
+					<input type="submit" value="<?php echo __($guid, 'Submit'); ?>">
 				</td>
 			</tr>
 		</table>

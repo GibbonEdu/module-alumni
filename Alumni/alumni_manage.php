@@ -45,8 +45,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
     echo __($guid, 'Filter');
     echo '</h3>';
     echo "<form method='get' action='".$_SESSION[$guid]['absoluteURL']."/index.php?q=/modules/Alumni/alumni_manage.php'>";
-    echo "<table class='noIntBorder' cellspacing='0' style='width: 100%'>";
-    ?>
+    echo "<table class='noIntBorder' cellspacing='0' style='width: 100%'>"; ?>
 	<tr>
 		<td>
 			<b><?php echo __($guid, 'Graduating Year') ?></b><br/>
@@ -107,8 +106,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         $sql = "SELECT * FROM alumniAlumnus $sqlWhere ORDER BY timestamp DESC";
         $result = $connection2->prepare($sql);
         $result->execute($data);
-    } catch (PDOException $e) {
-        echo "<div class='error'>".$e->getMessage().'</div>';
+    } catch (PDOException $e) { echo "<div class='error'>".$e->getMessage().'</div>';
     }
     $sqlPage = $sql.' LIMIT '.$_SESSION[$guid]['pagination'].' OFFSET '.(($page - 1) * $_SESSION[$guid]['pagination']);
 
@@ -116,8 +114,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
     echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module']."/alumni_manage_add.php&graduatingYear=$graduatingYear'>".__($guid, 'Add')."<img style='margin: 0 0 -4px 5px' title='".__($guid, 'Add')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/page_new.png'/></a>";
     echo '</div>';
 
-    if ($result->rowCount() < 1) {
-        echo "<div class='error'>";
+    if ($result->rowCount() < 1) { echo "<div class='error'>";
         echo __($guid, 'There are no records to display.');
         echo '</div>';
     } else {
@@ -157,55 +154,55 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
             }
             ++$count;
 
-                //COLOR ROW BY STATUS!
-                echo "<tr class=$rowNum>";
-            echo '<td>';
-            echo formatName($row['title'], $row['firstName'], $row['surname'], 'Parent', false, false).'</b><br/>';
-            echo '</td>';
-            echo '<td>';
-            echo $row['email'];
-            echo '</td>';
-            echo '<td>';
-            echo $row['graduatingYear'];
-            echo '</td>';
-            echo '<td>';
-            echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Edit')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/config.png'/></a> ";
-            echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
-            echo "<script type='text/javascript'>";
-            echo '$(document).ready(function(){';
-            echo "\$(\".comment-$count\").hide();";
-            echo "\$(\".show_hide-$count\").fadeIn(1000);";
-            echo "\$(\".show_hide-$count\").click(function(){";
-            echo "\$(\".comment-$count\").fadeToggle(1000);";
-            echo '});';
-            echo '});';
-            echo '</script>';
-            echo "<a title='".__($guid, 'View Details')."' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='".$_SESSION[$guid]['absoluteURL']."/themes/Default/img/page_down.png' alt='".__($guid, 'View Details')."' onclick='return false;' /></a>";
-            echo '</td>';
-            echo '</tr>';
-            echo "<tr class='comment-$count' id='comment-$count'>";
-            echo '<td colspan=4>';
-            echo '<b>'.__($guid, 'Official Name').': </b>'.$row['officialName'].'<br/>';
-            echo '<b>'.__($guid, 'Maiden Name').': </b>'.$row['maidenName'].'<br/>';
-            echo '<b>'.__($guid, 'Gender').': </b>'.$row['gender'].'<br/>';
-            echo '<b>'.__($guid, 'Username').': </b>'.$row['username'].'<br/>';
-            echo '<b>'.__($guid, 'Date Of Birth').': </b>';
-            if ($row['dob'] != '') {
-                echo dateConvertBack($guid, $row['dob']);
-            }
-            echo '<br/>';
-            echo '<b>'.__($guid, 'Country of Residence').': </b>'.$row['address1Country'].'<br/>';
-            echo '<b>'.__($guid, 'Profession').': </b>'.$row['profession'].'<br/>';
-            echo '<b>'.__($guid, 'Employer').': </b>'.$row['employer'].'<br/>';
-            echo '<b>'.__($guid, 'Job Title').': </b>'.$row['jobTitle'].'<br/>';
-            echo '<b>'.__($guid, 'Date Joined').': </b>';
-            if ($row['timestamp'] != '') {
-                echo dateConvertBack($guid, substr($row['timestamp'], 0, 10));
-            }
-            echo '<br/>';
-            echo '</td>';
-            echo '</tr>';
-        }
+			//COLOR ROW BY STATUS!
+			echo "<tr class=$rowNum>";
+			echo '<td>';
+			echo formatName($row['title'], $row['firstName'], $row['surname'], 'Parent', false, false).'</b><br/>';
+			echo '</td>';
+			echo '<td>';
+			echo $row['email'];
+			echo '</td>';
+			echo '<td>';
+			echo $row['graduatingYear'];
+			echo '</td>';
+			echo '<td>';
+			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Edit')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/config.png'/></a> ";
+			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
+			echo "<script type='text/javascript'>";
+			echo '$(document).ready(function(){';
+			echo "\$(\".comment-$count\").hide();";
+			echo "\$(\".show_hide-$count\").fadeIn(1000);";
+			echo "\$(\".show_hide-$count\").click(function(){";
+			echo "\$(\".comment-$count\").fadeToggle(1000);";
+			echo '});';
+			echo '});';
+			echo '</script>';
+			echo "<a title='".__($guid, 'View Details')."' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='".$_SESSION[$guid]['absoluteURL']."/themes/Default/img/page_down.png' alt='".__($guid, 'View Details')."' onclick='return false;' /></a>";
+			echo '</td>';
+			echo '</tr>';
+			echo "<tr class='comment-$count' id='comment-$count'>";
+			echo '<td colspan=4>';
+			echo '<b>'.__($guid, 'Official Name').': </b>'.$row['officialName'].'<br/>';
+			echo '<b>'.__($guid, 'Maiden Name').': </b>'.$row['maidenName'].'<br/>';
+			echo '<b>'.__($guid, 'Gender').': </b>'.$row['gender'].'<br/>';
+			echo '<b>'.__($guid, 'Username').': </b>'.$row['username'].'<br/>';
+			echo '<b>'.__($guid, 'Date Of Birth').': </b>';
+			if ($row['dob'] != '') {
+				echo dateConvertBack($guid, $row['dob']);
+			}
+			echo '<br/>';
+			echo '<b>'.__($guid, 'Country of Residence').': </b>'.$row['address1Country'].'<br/>';
+			echo '<b>'.__($guid, 'Profession').': </b>'.$row['profession'].'<br/>';
+			echo '<b>'.__($guid, 'Employer').': </b>'.$row['employer'].'<br/>';
+			echo '<b>'.__($guid, 'Job Title').': </b>'.$row['jobTitle'].'<br/>';
+			echo '<b>'.__($guid, 'Date Joined').': </b>';
+			if ($row['timestamp'] != '') {
+				echo dateConvertBack($guid, substr($row['timestamp'], 0, 10));
+			}
+			echo '<br/>';
+			echo '</td>';
+			echo '</tr>';
+		}
         echo '</table>';
 
         if ($result->rowCount() > $_SESSION[$guid]['pagination']) {
