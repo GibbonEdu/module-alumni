@@ -62,7 +62,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
             $officialName = $_POST['officialName'];
             $maidenName = $_POST['maidenName'];
             $gender = $_POST['gender'];
-            $username = $_POST['username2'];
+            $username = $_POST['username'];
             $dob = $_POST['dob'];
             if ($dob == '') {
                 $dob = null;
