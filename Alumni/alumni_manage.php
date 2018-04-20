@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-@session_start();
+use Gibbon\Forms\Form;
 
 //Module includes
 include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
@@ -36,47 +36,25 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         returnProcess($guid, $_GET['return'], null, null);
     }
 
-    $graduatingYear = null;
-    if (isset($_GET['graduatingYear'])) {
-        $graduatingYear = $_GET['graduatingYear'];
-    }
+    $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
 
     echo '<h3>';
     echo __($guid, 'Filter');
     echo '</h3>';
-    echo "<form method='get' action='".$_SESSION[$guid]['absoluteURL']."/index.php?q=/modules/Alumni/alumni_manage.php'>";
-    echo "<table class='noIntBorder' cellspacing='0' style='width: 100%'>"; ?>
-	<tr>
-		<td>
-			<b><?php echo __($guid, 'Graduating Year') ?></b><br/>
-			<span style="font-size: 90%"><i></i></span>
-		</td>
-		<td class="right">
-			<select name="graduatingYear" id="graduatingYear" style="width: 302px">
-				<?php
-                echo "<option value=''></option>";
-                for ($i = date('Y'); $i > (date('Y') - 200); --$i) {
-                    $selected='' ;
-                    if ($graduatingYear==$i) {
-                        $selected='selected' ;
-                    }
-                    echo "<option $selected value='$i'>$i</option>";
-                }
-                ?>
-			</select>
-		</td>
-	</tr>
-	<?php
 
-    echo '<tr>';
-        echo "<td class='right' colspan=2>";
-            echo "<input type='hidden' name='q' value='".$_GET['q']."'>";
-            echo "<a href='".$_SESSION[$guid]['absoluteURL']."/index.php?q=/modules/Alumni/alumni_manage.php'>".__($guid, 'Clear Filters').'</a> ';
-            echo "<input type='submit' value='".__($guid, 'Go')."'>";
-        echo '</td>';
-    echo '</tr>';
-    echo '</table>';
-    echo '</form>';
+    $form = Form::create('search', $_SESSION[$guid]['absoluteURL'].'/index.php', 'get');
+    $form->setClass('noIntBorder fullWidth');
+
+    $form->addHiddenValue('q', '/modules/'.$_SESSION[$guid]['module'].'/alumni_manage.php');
+
+    $row = $form->addRow();
+        $row->addLabel('graduatingYear', __('Graduating Year'));
+        $row->addSelect('graduatingYear')->fromArray(range(date('Y'), date('Y')-100, -1))->selected($graduatingYear)->placeholder();
+
+    $row = $form->addRow();
+        $row->addSearchSubmit($gibbon->session, __('Clear Search'));
+
+    echo $form->getOutput();
 
     echo '<h3>';
     echo __($guid, 'View Records');
@@ -167,7 +145,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			echo '</td>';
 			echo '<td>';
 			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Edit')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/config.png'/></a> ";
-			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
+			echo "<a class='thickbox' href='".$_SESSION[$guid]['absoluteURL'].'/fullscreen.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear&width=650&height=135'><img title='".__($guid, 'Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
 			echo "<script type='text/javascript'>";
 			echo '$(document).ready(function(){';
 			echo "\$(\".comment-$count\").hide();";

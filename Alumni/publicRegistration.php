@@ -17,7 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-@session_start();
+use Gibbon\Forms\Form;
+use Gibbon\Forms\DatabaseFormFactory;
 
 $proceed = false;
 
@@ -59,297 +60,103 @@ if ($proceed == false) {
     if ($facebookLink != '') {
         echo ' '.sprintf(__($guid, 'Please don\'t forget to take a look at, and like, our alumni %1$sFacebook page%2$s.'), "<a href='".htmlPrep($facebookLink)."' target='_blank'>", '</a>');
     }
-    ?>
-	</p>
-	<form method="post" action="<?php echo $_SESSION[$guid]['absoluteURL'].'/modules/Alumni/publicRegistrationProcess.php' ?>" enctype="multipart/form-data">
-		<table class='smallIntBorder' cellspacing='0' style="width: 100%">
-			<tr class='break'>
-				<th colspan=2>
-					<?php echo __($guid, 'Personal Details');
-    				?>
-				</td>
-			</tr>
-			<tr>
-				<td style='width: 275px'>
-					<b><?php echo __($guid, 'Title') ?></b><br/>
-				</td>
-				<td class="right">
-					<select style="width: 302px" name="title">
-						<option value=""></option>
-						<option value="Ms."><?php echo __($guid, 'Ms.') ?></option>
-						<option value="Miss"><?php echo __($guid, 'Miss') ?></option>
-						<option value="Mr."><?php echo __($guid, 'Mr.') ?></option>
-						<option value="Mrs."><?php echo __($guid, 'Mrs.') ?></option>
-						<option value="Dr."><?php echo __($guid, 'Dr.') ?></option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'First Name') ?> *</b><br/>
-				</td>
-				<td class="right">
-					<input name="firstName" id="firstName" maxlength=30 value="" type="text" style="width: 300px">
-					<script type="text/javascript">
-						var firstName=new LiveValidation('firstName');
-						firstName.add(Validate.Presence);
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td style='width: 275px'>
-					<b><?php echo __($guid, 'Surname') ?> *</b><br/>
-				</td>
-				<td class="right">
-					<input name="surname" id="surname" maxlength=30 value="" type="text" style="width: 300px">
-					<script type="text/javascript">
-						var surname=new LiveValidation('surname');
-						surname.add(Validate.Presence);
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Official Name') ?> *</b><br/>
-					<span style="font-size: 90%"><i><?php echo __($guid, 'Full name as shown in ID documents.') ?></i></span>
-				</td>
-				<td class="right">
-					<input name="officialName" id="officialName" maxlength=150 value="" type="text" style="width: 300px">
-					<script type="text/javascript">
-						var officialName=new LiveValidation('officialName');
-						officialName.add(Validate.Presence);
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Email') ?> *</b><br/>
-				</td>
-				<td class="right">
-					<input name="email" id="email" maxlength=50 value="" type="text" style="width: 300px">
-					<script type="text/javascript">
-						var email=new LiveValidation('email');
-						email.add(Validate.Email);
-						email.add(Validate.Presence);
-					</script>
-				</td>
-			</tr>
 
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Gender') ?> *</b><br/>
-				</td>
-				<td class="right">
-					<select name="gender" id="gender" style="width: 302px">
-						<option value="Please select..."><?php echo __($guid, 'Please select...') ?></option>
-						<option value="F"><?php echo __($guid, 'Female') ?></option>
-						<option value="M"><?php echo __($guid, 'Male') ?></option>
-						<option value="F"><?php echo __($guid, 'Other') ?></option>
-						<option value="M"><?php echo __($guid, 'Unspecified') ?></option>
-					</select>
-					<script type="text/javascript">
-						var gender=new LiveValidation('gender');
-						gender.add(Validate.Exclusion, { within: ['Please select...'], failureMessage: "<?php echo __($guid, 'Select something!') ?>"});
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Main Role') ?> *</b><br/>
-					<span style="font-size: 90%"><i><?php echo __($guid, 'In what way, primarily, were you involved with the school?') ?></i></span>
-				</td>
-				<td class="right">
-					<select name="formerRole" id="formerRole" style="width: 302px">
-						<option value="Please select..."><?php echo __($guid, 'Please select...') ?></option>
-						<option value="Student"><?php echo __($guid, 'Student') ?></option>
-						<option value="Staff"><?php echo __($guid, 'Staff') ?></option>
-						<option value="Parent"><?php echo __($guid, 'Parent') ?></option>
-						<option value="Other"><?php echo __($guid, 'Other') ?></option>
-					</select>
-					<script type="text/javascript">
-						var formerRole=new LiveValidation('formerRole');
-						formerRole.add(Validate.Exclusion, { within: ['Please select...'], failureMessage: "<?php echo __($guid, 'Select something!') ?>"});
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Date of Birth') ?> *</b><br/>
-					<span style="font-size: 90%"><i><?php echo __($guid, 'Format:').' '.$_SESSION[$guid]['i18n']['dateFormat']  ?></i></span>
-				</td>
-				<td class="right">
-					<input name="dob" id="dob" maxlength=10 value="" type="text" style="width: 300px">
-					<script type="text/javascript">
-						var dob=new LiveValidation('dob');
-						dob.add( Validate.Format, {pattern: <?php if ($_SESSION[$guid]['i18n']['dateFormatRegEx'] == '') {
-							echo "/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/i";
-						} else {
-							echo $_SESSION[$guid]['i18n']['dateFormatRegEx'];
-						}
-							?>, failureMessage: "Use <?php if ($_SESSION[$guid]['i18n']['dateFormat'] == '') {
-							echo 'dd/mm/yyyy';
-						} else {
-							echo $_SESSION[$guid]['i18n']['dateFormat'];
-						}
-						?>." } );
-					 	dob.add(Validate.Presence);
-					</script>
-					 <script type="text/javascript">
-						$(function() {
-							$( "#dob" ).datepicker();
-						});
-					</script>
-				</td>
-			</tr>
+    $form = Form::create('action', $_SESSION[$guid]['absoluteURL'].'/modules/Alumni/publicRegistrationProcess.php');
+    $form->setFactory(DatabaseFormFactory::create($pdo));
 
-			<tr class='break'>
-				<th colspan=2>
-					<?php echo __($guid, 'Tell Us More About Yourself');
-    				?>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Maiden Name') ?></b><br/>
-					<span style="font-size: 90%"><i><?php echo __($guid, 'Your surname prior to marriage.') ?></i></span>
-				</td>
-				<td class="right">
-					<input name="maidenName" id="maidenName" maxlength=30 value="" type="text" style="width: 300px">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Username') ?></b><br/>
-					<span style="font-size: 90%"><i><?php echo __($guid, 'If you are young enough, this is how you logged into computers.') ?></i></span>
-				</td>
-				<td class="right">
-					<input name="username2" id="username2" maxlength=20 value="" type="text" style="width: 300px">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Graduating Year') ?></b><br/>
-				</td>
-				<td class="right">
-					<select name="graduatingYear" id="graduatingYear" style="width: 302px">
-						<?php
-                        echo "<option value=''></option>";
-						for ($i = date('Y'); $i > (date('Y') - 200); --$i) {
-							echo "<option value='$i'>$i</option>";
-						}
-						?>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Current Country of Residence') ?></b><br/>
-				</td>
-				<td class="right">
-					<select name="address1Country" id="address1Country" style="width: 302px">
-						<?php
-                        echo "<option value=''></option>";
-						try {
-							$dataSelect = array();
-							$sqlSelect = 'SELECT printable_name FROM gibbonCountry ORDER BY printable_name';
-							$resultSelect = $connection2->prepare($sqlSelect);
-							$resultSelect->execute($dataSelect);
-						} catch (PDOException $e) {
-						}
-						while ($rowSelect = $resultSelect->fetch()) {
-							echo "<option value='".$rowSelect['printable_name']."'>".htmlPrep(__($guid, $rowSelect['printable_name'])).'</option>';
-						}
-						?>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Profession') ?></b><br/>
-				</td>
-				<td class="right">
-					<input name="profession" id="profession" maxlength=30 value="" type="text" style="width: 300px">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Employer') ?></b><br/>
-				</td>
-				<td class="right">
-					<input name="employer" id="employer" maxlength=30 value="" type="text" style="width: 300px">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b><?php echo __($guid, 'Job Title') ?></b><br/>
-				</td>
-				<td class="right">
-					<input name="jobTitle" id="jobTitle" maxlength=30 value="" type="text" style="width: 300px">
-				</td>
-			</tr>
+    $form->addHiddenValue('address', $_SESSION[$guid]['address']);
 
-			<?php
-            //Privacy statement
-            $privacyStatement = getSettingByScope($connection2, 'User Admin', 'publicRegistrationPrivacyStatement');
-			if ($privacyStatement != '') {
-				echo "<tr class='break'>";
-				echo '<th colspan=2>';
-				echo __($guid, 'Privacy Statement');
-				echo '</th>';
-				echo '</tr>';
-				echo '<tr>';
-				echo '<td colspan=2>';
-				echo '<p>';
-				echo $privacyStatement;
-				echo '</p>';
-				echo '</td>';
-				echo '</tr>';
-			}
+    $form->addRow()->addHeading(__('Personal Details'));
 
-            //Get agreement
-            $agreement = getSettingByScope($connection2, 'User Admin', 'publicRegistrationAgreement');
-			if ($agreement != '') {
-				echo "<tr class='break'>";
-				echo '<th colspan=2>';
-				echo __($guid, 'Agreement');
-				echo '</td>';
-				echo '</tr>';
+    $row = $form->addRow();
+        $row->addLabel('title', __('Title'));
+        $row->addSelectTitle('title');
 
-				echo '<tr>';
-				echo '<td colspan=2>';
-				echo $agreement;
-				echo '</td>';
-				echo '</tr>';
-				echo '<tr>';
-				echo '<td>';
-				echo '<b>'.__($guid, 'Do you agree to the above?').'</b><br/>';
-				echo '</td>';
-				echo "<td class='right'>";
-				echo "Yes <input type='checkbox' name='agreement' id='agreement'>";
-				?>
-				<script type="text/javascript">
-					var agreement=new LiveValidation('agreement');
-					agreement.add( Validate.Acceptance );
-				</script>
-				 <?php
-			echo '</td>';
-        echo '</tr>';
+    $row = $form->addRow();
+        $row->addLabel('firstName', __('First Name'));
+        $row->addTextField('firstName')->isRequired()->maxLength(30);
+        
+    $row = $form->addRow();
+        $row->addLabel('surname', __('Surname'));
+        $row->addTextField('surname')->isRequired()->maxLength(30);
+
+    $row = $form->addRow();
+        $row->addLabel('officialName', __('Official Name'))->description(__('Full name as shown in ID documents.'));
+        $row->addTextField('officialName')->isRequired()->maxLength(150);
+
+    $row = $form->addRow();
+        $row->addLabel('email', __('Email'));
+        $email = $row->addEmail('email')->isRequired()->maxLength(50);
+
+    $row = $form->addRow();
+        $row->addLabel('gender', __('Gender'));
+        $row->addSelectGender('gender')->isRequired();
+
+    $row = $form->addRow();
+        $row->addLabel('dob', __('Date of Birth'));
+        $row->addDate('dob')->isRequired();
+        
+    $formerRoles = array(
+        'Student' => __('Student'),
+        'Staff' => __('Staff'),
+        'Parent' => __('Parent'),
+        'Other' => __('Other'),
+    );
+    $row = $form->addRow();
+        $row->addLabel('formerRole', __('Main Role'))->description(__('In what way, primarily, were you involved with the school?'));
+        $row->addSelect('formerRole')->fromArray($formerRoles)->isRequired()->placeholder();
+
+    $form->addRow()->addHeading(__('Tell Us More About Yourself'));
+
+    $row = $form->addRow();
+        $row->addLabel('maidenName', __('Maiden Name'))->description(__('Your surname prior to marriage.'));
+        $row->addTextField('maidenName')->maxLength(30);
+
+    $row = $form->addRow();
+        $row->addLabel('username2', __('Username'))->description(__('If you are young enough, this is how you logged into computers.'));
+        $row->addTextField('username2')->maxLength(20);
+
+    $row = $form->addRow();
+        $row->addLabel('graduatingYear', __('Graduating Year'));
+        $row->addSelect('graduatingYear')->fromArray(range(date('Y'), date('Y')-100, -1))->placeholder();
+
+    $row = $form->addRow();
+        $row->addLabel('address1Country', __('Current Country of Residence'));
+        $row->addSelectCountry('address1Country')->placeholder('');
+
+    $row = $form->addRow();
+        $row->addLabel('profession', __('Profession'));
+        $row->addTextField('profession')->maxLength(30);
+
+    $row = $form->addRow();
+        $row->addLabel('employer', __('Employer'));
+        $row->addTextField('employer')->maxLength(30);
+
+    $row = $form->addRow();
+        $row->addLabel('jobTitle', __('Job Title'));
+        $row->addTextField('jobTitle')->maxLength(30);
+
+    $privacyStatement = getSettingByScope($connection2, 'User Admin', 'publicRegistrationPrivacyStatement');
+    if (!empty($privacyStatement)) {
+        $form->addRow()->addHeading(__('Privacy Statement'));
+        $row = $form->addRow();
+            $row->addContent($privacyStatement);
     }
 
-    ?>
-	<tr>
-		<td>
-			<span style="font-size: 90%"><i>* <?php echo __($guid, 'denotes a required field'); ?></i></span>
-				</td>
-				<td class="right">
-					<input type="hidden" name="address" value="<?php echo $_SESSION[$guid]['address'] ?>">
-					<input type="submit" value="<?php echo __($guid, 'Submit'); ?>">
-				</td>
-			</tr>
-		</table>
-	</form>
+    $agreement = getSettingByScope($connection2, 'User Admin', 'publicRegistrationAgreement');
+    if (!empty($agreement)) {
+        $form->addRow()->addHeading(__('Agreement'));
+        $row = $form->addRow();
+            $row->addContent($agreement);
 
-	<?php
+        $row = $form->addRow();
+            $row->addLabel('agreement', __('Do you agree to the above?'));
+            $row->addCheckbox('agreement')->isRequired()->description(__('Yes'));
+    }
 
+    $row = $form->addRow();
+        $row->addFooter();
+        $row->addSubmit();
+
+    echo $form->getOutput();
 }
-?>
