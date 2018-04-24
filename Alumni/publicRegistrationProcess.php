@@ -55,7 +55,7 @@ if ($proceed == false) {
     $profession = $_POST['profession'];
     $employer = $_POST['employer'];
     $jobTitle = $_POST['jobTitle'];
-    $graduatingYear = $_POST['graduatingYear'];
+    $graduatingYear = (empty($_POST['graduatingYear']) ? null : $_POST['graduatingYear']);
     $formerRole = $_POST['formerRole'];
 
     if ($surname == '' or $firstName == '' or $officialName == '' or $gender == '' or $dob == '' or $email == '' or $formerRole == '') {

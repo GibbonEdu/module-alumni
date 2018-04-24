@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.3.08
+-------
+Object oriented rewrite and code cleanup
+
 v0.3.07
 -------
 Gibbon Core v13 setting compatibility
