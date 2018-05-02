@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.4.00
+-------
+Updated default database storage engine to InnoDB
+
 v0.3.08
 -------
 Object oriented rewrite and code cleanup

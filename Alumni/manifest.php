@@ -25,12 +25,12 @@ $description = 'The Alumni module allows schools to accept alumni registrations,
 $entryURL = 'alumni_manage.php';
 $type = 'Additional';
 $category = 'People';
-$version = '0.3.08';
+$version = '0.4.00';
 $author = 'Ross Parker';
 $url = 'http://rossparker.org/free-learning';
 
 //Module tables
-$moduleTables[0] = "CREATE TABLE `alumniAlumnus` (  `alumniAlumnusID` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,  `title` varchar(5) NOT NULL,  `surname` varchar(30) NOT NULL DEFAULT '',  `firstName` varchar(30) NOT NULL DEFAULT '',  `officialName` varchar(150) NOT NULL,  `maidenName` varchar(30) NOT NULL,  `gender` enum('M','F','Other','Unspecified') NOT NULL DEFAULT 'Unspecified',  `username` varchar(20) NOT NULL,  `dob` date DEFAULT NULL,  `email` varchar(50) DEFAULT NULL,  `address1Country` varchar(255) NOT NULL,  `profession` varchar(30) NOT NULL,  `employer` varchar(30) NOT NULL,  `jobTitle` varchar(30) NOT NULL,  `graduatingYear` int(4) DEFAULT NULL,`formerRole` enum('Staff','Student','Parent','Other') DEFAULT NULL, `gibbonPersonID` int(10) DEFAULT NULL, `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`alumniAlumnusID`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$moduleTables[0] = "CREATE TABLE `alumniAlumnus` (  `alumniAlumnusID` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,  `title` varchar(5) NOT NULL,  `surname` varchar(30) NOT NULL DEFAULT '',  `firstName` varchar(30) NOT NULL DEFAULT '',  `officialName` varchar(150) NOT NULL,  `maidenName` varchar(30) NOT NULL,  `gender` enum('M','F','Other','Unspecified') NOT NULL DEFAULT 'Unspecified',  `username` varchar(20) NOT NULL,  `dob` date DEFAULT NULL,  `email` varchar(50) DEFAULT NULL,  `address1Country` varchar(255) NOT NULL,  `profession` varchar(30) NOT NULL,  `employer` varchar(30) NOT NULL,  `jobTitle` varchar(30) NOT NULL,  `graduatingYear` int(4) DEFAULT NULL,`formerRole` enum('Staff','Student','Parent','Other') DEFAULT NULL, `gibbonPersonID` int(10) DEFAULT NULL, `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`alumniAlumnusID`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 //Settings
 $gibbonSetting[0] = "INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'showPublicRegistration', 'Show Public Registration', 'Should the alumni registration form be displayed on the school\'s Gibbon homepage, or available via a link only?.', 'Y');";
