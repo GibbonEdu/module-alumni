@@ -36,9 +36,9 @@ if ($proceed == false) {
     echo '</div>';
 } else {
     //Proceed!
-    echo "<div class='trail'>";
-    echo "<div class='trailHead'><a href='".$_SESSION[$guid]['absoluteURL']."'>".__('Home')."</a> > </div><div class='trailEnd'>".$_SESSION[$guid]['organisationNameShort'].' '.__('Alumni Registration').'</div>';
-    echo '</div>';
+    $page->breadcrumbs->add(__('{orgName} Alumni Registration', [
+        'orgName' => $_SESSION[$guid]['organisationNameShort'] ?? ''
+    ]));
 
     $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
 

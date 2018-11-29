@@ -29,9 +29,9 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
     echo __('You do not have access to this action.');
     echo '</div>';
 } else {
-    echo "<div class='trail'>";
-    echo "<div class='trailHead'><a href='".$_SESSION[$guid]['absoluteURL']."'>".__('Home')."</a> > <a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.getModuleName($_GET['q']).'/'.getModuleEntry($_GET['q'], $connection2, $guid)."'>".__(getModuleName($_GET['q']))."</a> > <a href='".$_SESSION[$guid]['absoluteURL']."/index.php?q=/modules/Alumni/alumni_manage.php'>".__('Manage Alumni')."</a> > </div><div class='trailEnd'>".__('Add').'</div>';
-    echo '</div>';
+    $page->breadcrumbs
+      ->add(__('Manage Alumni'), 'alumni_manage.php')
+      ->add(__('Add'));
 
     $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
     $alumniAlumnusID = isset($_GET['alumniAlumnusID'])? $_GET['alumniAlumnusID'] : '';
