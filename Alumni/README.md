@@ -12,6 +12,11 @@ exists: `GIBBON_HOME/modules/Alumni/manifest.php`.
 
 For support visit [https://gibbonedu.org/support](https://gibbonedu.org/support).
 
+## Compatibility
+
+* v0.5.00 only supports Gibbon v17+
+* v0.4.00 supports Gibbon v16
+
 ## Latest Source Code
 
 This module is developed on [GitHub][repo-url].
