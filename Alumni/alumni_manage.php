@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 use Gibbon\Forms\Form;
+use Gibbon\Services\Format;
 
 //Module includes
 include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
@@ -133,7 +134,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			//COLOR ROW BY STATUS!
 			echo "<tr class=$rowNum>";
 			echo '<td>';
-			echo formatName($row['title'], $row['firstName'], $row['surname'], 'Parent', false, false).'</b><br/>';
+			echo Format::name($row['title'], $row['firstName'], $row['surname'], 'Parent', false, false).'</b><br/>';
 			echo '</td>';
 			echo '<td>';
 			echo $row['email'];
