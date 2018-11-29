@@ -26,11 +26,11 @@ include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.php') == false) {
     //Acess denied
     echo "<div class='error'>";
-    echo __($guid, 'You do not have access to this action.');
+    echo __('You do not have access to this action.');
     echo '</div>';
 } else {
     echo "<div class='trail'>";
-    echo "<div class='trailHead'><a href='".$_SESSION[$guid]['absoluteURL']."'>".__($guid, 'Home')."</a> > <a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.getModuleName($_GET['q']).'/'.getModuleEntry($_GET['q'], $connection2, $guid)."'>".__($guid, getModuleName($_GET['q']))."</a> > <a href='".$_SESSION[$guid]['absoluteURL']."/index.php?q=/modules/Alumni/alumni_manage.php'>".__($guid, 'Manage Alumni')."</a> > </div><div class='trailEnd'>".__($guid, 'Add').'</div>';
+    echo "<div class='trailHead'><a href='".$_SESSION[$guid]['absoluteURL']."'>".__('Home')."</a> > <a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.getModuleName($_GET['q']).'/'.getModuleEntry($_GET['q'], $connection2, $guid)."'>".__(getModuleName($_GET['q']))."</a> > <a href='".$_SESSION[$guid]['absoluteURL']."/index.php?q=/modules/Alumni/alumni_manage.php'>".__('Manage Alumni')."</a> > </div><div class='trailEnd'>".__('Add').'</div>';
     echo '</div>';
 
     $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
@@ -45,7 +45,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
     }
 
     if ($graduatingYear != '') { echo "<div class='linkTop'>";
-          echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$graduatingYear."'>".__($guid, 'Back to Search Results').'</a>';
+          echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$graduatingYear."'>".__('Back to Search Results').'</a>';
         echo '</div>';
     }
 
