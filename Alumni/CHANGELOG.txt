@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.5.00
+-------
+Gibbon Core v17 compatibility
+
 v0.4.00
 -------
 Updated default database storage engine to InnoDB

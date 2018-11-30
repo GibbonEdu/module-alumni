@@ -69,3 +69,8 @@ $sql[$count][1] = '';
 ++$count;
 $sql[$count][0] = '0.4.00';
 $sql[$count][1] = '';
+
+//v0.5.00
+++$count;
+$sql[$count][0] = '0.5.00';
+$sql[$count][1] = '';
