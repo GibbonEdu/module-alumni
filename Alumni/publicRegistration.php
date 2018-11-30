@@ -32,19 +32,19 @@ if (isset($_SESSION[$guid]['username']) == false) {
 if ($proceed == false) {
     //Acess denied
     echo "<div class='error'>";
-    echo __($guid, 'You do not have access to this action.');
+    echo __('You do not have access to this action.');
     echo '</div>';
 } else {
     //Proceed!
-    echo "<div class='trail'>";
-    echo "<div class='trailHead'><a href='".$_SESSION[$guid]['absoluteURL']."'>".__($guid, 'Home')."</a> > </div><div class='trailEnd'>".$_SESSION[$guid]['organisationNameShort'].' '.__($guid, 'Alumni Registration').'</div>';
-    echo '</div>';
+    $page->breadcrumbs->add(__('{orgName} Alumni Registration', [
+        'orgName' => $_SESSION[$guid]['organisationNameShort'] ?? ''
+    ]));
 
     $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
 
     $returns = array();
-    $returns['error5'] = sprintf(__($guid, 'Your request failed because you do not meet the minimum age for joining this site (%1$s years of age).'), $publicRegistrationMinimumAge);
-    $returns['success0'] = __($guid, 'Your registration was successfully submitted: a member of our alumni team will be in touch shortly.');
+    $returns['error5'] = sprintf(__('Your request failed because you do not meet the minimum age for joining this site (%1$s years of age).'), $publicRegistrationMinimumAge);
+    $returns['success0'] = __('Your registration was successfully submitted: a member of our alumni team will be in touch shortly.');
     $editLink = '';
     if (isset($_GET['editID'])) {
         $editLink = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];
@@ -55,10 +55,10 @@ if ($proceed == false) {
     ?>
 	<p>
 		<?php
-        echo sprintf(__($guid, 'This registration form is for former members of the %1$s community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.'), $_SESSION[$guid]['organisationNameShort']);
+        echo sprintf(__('This registration form is for former members of the %1$s community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.'), $_SESSION[$guid]['organisationNameShort']);
     $facebookLink = getSettingByScope($connection2, 'Alumni', 'facebookLink');
     if ($facebookLink != '') {
-        echo ' '.sprintf(__($guid, 'Please don\'t forget to take a look at, and like, our alumni %1$sFacebook page%2$s.'), "<a href='".htmlPrep($facebookLink)."' target='_blank'>", '</a>');
+        echo ' '.sprintf(__('Please don\'t forget to take a look at, and like, our alumni %1$sFacebook page%2$s.'), "<a href='".htmlPrep($facebookLink)."' target='_blank'>", '</a>');
     }
 
     $form = Form::create('action', $_SESSION[$guid]['absoluteURL'].'/modules/Alumni/publicRegistrationProcess.php');

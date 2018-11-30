@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 use Gibbon\Forms\Form;
+use Gibbon\Services\Format;
 
 //Module includes
 include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
@@ -25,12 +26,10 @@ include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php') == false) {
     //Acess denied
     echo "<div class='error'>";
-    echo __($guid, 'You do not have access to this action.');
+    echo __('You do not have access to this action.');
     echo '</div>';
 } else {
-    echo "<div class='trail'>";
-    echo "<div class='trailHead'><a href='".$_SESSION[$guid]['absoluteURL']."'>".__($guid, 'Home')."</a> > <a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.getModuleName($_GET['q']).'/'.getModuleEntry($_GET['q'], $connection2, $guid)."'>".__($guid, getModuleName($_GET['q']))."</a> > </div><div class='trailEnd'>".__($guid, 'Manage Alumni').'</div>';
-    echo '</div>';
+    $page->breadcrumbs->add('Manage Alumni');
 
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], null, null);
@@ -39,7 +38,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
     $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
 
     echo '<h3>';
-    echo __($guid, 'Filter');
+    echo __('Filter');
     echo '</h3>';
 
     $form = Form::create('search', $_SESSION[$guid]['absoluteURL'].'/index.php', 'get');
@@ -57,7 +56,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
     echo $form->getOutput();
 
     echo '<h3>';
-    echo __($guid, 'View Records');
+    echo __('View Records');
     echo '</h3>';
     //Set pagination variable
     $page = 1;
@@ -89,11 +88,11 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
     $sqlPage = $sql.' LIMIT '.$_SESSION[$guid]['pagination'].' OFFSET '.(($page - 1) * $_SESSION[$guid]['pagination']);
 
     echo "<div class='linkTop'>";
-    echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module']."/alumni_manage_add.php&graduatingYear=$graduatingYear'>".__($guid, 'Add')."<img style='margin: 0 0 -4px 5px' title='".__($guid, 'Add')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/page_new.png'/></a>";
+    echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module']."/alumni_manage_add.php&graduatingYear=$graduatingYear'>".__('Add')."<img style='margin: 0 0 -4px 5px' title='".__('Add')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/page_new.png'/></a>";
     echo '</div>';
 
     if ($result->rowCount() < 1) { echo "<div class='error'>";
-        echo __($guid, 'There are no records to display.');
+        echo __('There are no records to display.');
         echo '</div>';
     } else {
         if ($result->rowCount() > $_SESSION[$guid]['pagination']) {
@@ -103,16 +102,16 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         echo "<table cellspacing='0' style='width: 100%'>";
         echo "<tr class='head'>";
         echo '<th>';
-        echo __($guid, 'Name');
+        echo __('Name');
         echo '</th>';
         echo '<th>';
-        echo __($guid, 'Email');
+        echo __('Email');
         echo '</th>';
         echo '<th>';
-        echo __($guid, 'Graduating Year');
+        echo __('Graduating Year');
         echo '</th>';
         echo "<th style='min-width: 70px'>";
-        echo __($guid, 'Actions');
+        echo __('Actions');
         echo '</th>';
         echo '</tr>';
 
@@ -135,7 +134,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			//COLOR ROW BY STATUS!
 			echo "<tr class=$rowNum>";
 			echo '<td>';
-			echo formatName($row['title'], $row['firstName'], $row['surname'], 'Parent', false, false).'</b><br/>';
+			echo Format::name($row['title'], $row['firstName'], $row['surname'], 'Parent', false, false).'</b><br/>';
 			echo '</td>';
 			echo '<td>';
 			echo $row['email'];
@@ -144,8 +143,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			echo $row['graduatingYear'];
 			echo '</td>';
 			echo '<td>';
-			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__($guid, 'Edit')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/config.png'/></a> ";
-			echo "<a class='thickbox' href='".$_SESSION[$guid]['absoluteURL'].'/fullscreen.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear&width=650&height=135'><img title='".__($guid, 'Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
+			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__('Edit')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/config.png'/></a> ";
+			echo "<a class='thickbox' href='".$_SESSION[$guid]['absoluteURL'].'/fullscreen.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear&width=650&height=135'><img title='".__('Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
 			echo "<script type='text/javascript'>";
 			echo '$(document).ready(function(){';
 			echo "\$(\".comment-$count\").hide();";
@@ -155,25 +154,25 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			echo '});';
 			echo '});';
 			echo '</script>';
-			echo "<a title='".__($guid, 'View Details')."' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='".$_SESSION[$guid]['absoluteURL']."/themes/Default/img/page_down.png' alt='".__($guid, 'View Details')."' onclick='return false;' /></a>";
+			echo "<a title='".__('View Details')."' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='".$_SESSION[$guid]['absoluteURL']."/themes/Default/img/page_down.png' alt='".__('View Details')."' onclick='return false;' /></a>";
 			echo '</td>';
 			echo '</tr>';
 			echo "<tr class='comment-$count' id='comment-$count'>";
 			echo '<td colspan=4>';
-			echo '<b>'.__($guid, 'Official Name').': </b>'.$row['officialName'].'<br/>';
-			echo '<b>'.__($guid, 'Maiden Name').': </b>'.$row['maidenName'].'<br/>';
-			echo '<b>'.__($guid, 'Gender').': </b>'.$row['gender'].'<br/>';
-			echo '<b>'.__($guid, 'Username').': </b>'.$row['username'].'<br/>';
-			echo '<b>'.__($guid, 'Date Of Birth').': </b>';
+			echo '<b>'.__('Official Name').': </b>'.$row['officialName'].'<br/>';
+			echo '<b>'.__('Maiden Name').': </b>'.$row['maidenName'].'<br/>';
+			echo '<b>'.__('Gender').': </b>'.$row['gender'].'<br/>';
+			echo '<b>'.__('Username').': </b>'.$row['username'].'<br/>';
+			echo '<b>'.__('Date Of Birth').': </b>';
 			if ($row['dob'] != '') {
 				echo dateConvertBack($guid, $row['dob']);
 			}
 			echo '<br/>';
-			echo '<b>'.__($guid, 'Country of Residence').': </b>'.$row['address1Country'].'<br/>';
-			echo '<b>'.__($guid, 'Profession').': </b>'.$row['profession'].'<br/>';
-			echo '<b>'.__($guid, 'Employer').': </b>'.$row['employer'].'<br/>';
-			echo '<b>'.__($guid, 'Job Title').': </b>'.$row['jobTitle'].'<br/>';
-			echo '<b>'.__($guid, 'Date Joined').': </b>';
+			echo '<b>'.__('Country of Residence').': </b>'.$row['address1Country'].'<br/>';
+			echo '<b>'.__('Profession').': </b>'.$row['profession'].'<br/>';
+			echo '<b>'.__('Employer').': </b>'.$row['employer'].'<br/>';
+			echo '<b>'.__('Job Title').': </b>'.$row['jobTitle'].'<br/>';
+			echo '<b>'.__('Date Joined').': </b>';
 			if ($row['timestamp'] != '') {
 				echo dateConvertBack($guid, substr($row['timestamp'], 0, 10));
 			}
@@ -188,4 +187,3 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         }
     }
 }
-?>
