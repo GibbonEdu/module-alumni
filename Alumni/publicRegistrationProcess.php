@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-include '../../gibbon.php';
+use Gibbon\Services\Format;
 
+include '../../gibbon.php';
 
 $URL = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/publicRegistration.php';
 
@@ -69,7 +70,7 @@ if ($proceed == false) {
         $ageFail = false;
         if ($publicRegistrationMinimumAge == '') {
             $ageFail = true;
-        } elseif ($publicRegistrationMinimumAge > 0 and $publicRegistrationMinimumAge > getAge(dateConvertToTimestamp($dob), true, true)) {
+        } elseif ($publicRegistrationMinimumAge > 0 and $publicRegistrationMinimumAge > (new DateTime('@'.Format::timestamp($dob)))->diff(new DateTime())->y) {
             $ageFail = true;
         }
 
