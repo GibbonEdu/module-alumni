@@ -79,10 +79,10 @@ if ($proceed == false) {
             $URL .= '&return=error5';
             header("Location: {$URL}");
         } else {
-            //Write to database
+            //Check for uniqueness of username
             try {
-                $data = array('title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole);
-                $sql = 'INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear, formerRole=:formerRole';
+                $data = array('email' => $email);
+                $sql = 'SELECT email FROM alumniAlumnus WHERE email=:email';
                 $result = $connection2->prepare($sql);
                 $result->execute($data);
             } catch (PDOException $e) {
@@ -92,9 +92,31 @@ if ($proceed == false) {
                 exit();
             }
 
-            //Success 0
-            $URL .= '&return=success0';
-            header("Location: {$URL}");
+            if ($result->rowCount() > 0) {
+                //Fail 7
+                $URL .= '&return=error7';
+                header("Location: {$URL}");
+                exit();
+            }
+            else {
+
+                //Write to database
+                try {
+                    $data = array('title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole);
+                    $sql = 'INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear, formerRole=:formerRole';
+                    $result = $connection2->prepare($sql);
+                    $result->execute($data);
+                } catch (PDOException $e) {
+                    //Fail 2
+                    $URL .= 'return=error2';
+                    header("Location: {$URL}");
+                    exit();
+                }
+
+                //Success 0
+                $URL .= '&return=success0';
+                header("Location: {$URL}");
+            }
         }
     }
 }

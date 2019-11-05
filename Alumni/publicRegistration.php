@@ -44,6 +44,7 @@ if ($proceed == false) {
 
     $returns = array();
     $returns['error5'] = sprintf(__('Your request failed because you do not meet the minimum age for joining this site (%1$s years of age).'), $publicRegistrationMinimumAge);
+    $returns['error7'] = __('Your request failed because the specified email address has already been registered');
     $returns['success0'] = __('Your registration was successfully submitted: a member of our alumni team will be in touch shortly.');
     $editLink = '';
     if (isset($_GET['editID'])) {
@@ -75,7 +76,7 @@ if ($proceed == false) {
     $row = $form->addRow();
         $row->addLabel('firstName', __('First Name'));
         $row->addTextField('firstName')->isRequired()->maxLength(30);
-        
+
     $row = $form->addRow();
         $row->addLabel('surname', __('Surname'));
         $row->addTextField('surname')->isRequired()->maxLength(30);
@@ -95,7 +96,7 @@ if ($proceed == false) {
     $row = $form->addRow();
         $row->addLabel('dob', __('Date of Birth'));
         $row->addDate('dob')->isRequired();
-        
+
     $formerRoles = array(
         'Student' => __('Student'),
         'Staff' => __('Staff'),

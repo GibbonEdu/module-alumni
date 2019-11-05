@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v0.6.00
+-------
+Email uniqueness check on public registration
+
 v0.5.00
 -------
 Gibbon Core v17 compatibility
