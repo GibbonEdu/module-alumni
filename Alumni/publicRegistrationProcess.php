@@ -23,17 +23,10 @@ include '../../gibbon.php';
 
 $URL = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/publicRegistration.php';
 
-$proceed = false;
+$enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
+$loggedIn = (isset($_SESSION[$guid]['username'])) ? true : false;
 
-if (isset($_SESSION[$guid]['username']) == false) {
-    $enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
-    if ($enablePublicRegistration == 'Y') {
-        $proceed = true;
-    }
-}
-
-if ($proceed == false) {
-    //Fail 0
+if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && $loggedIn)) {
     $URL .= '&return=error0';
     header("Location: {$URL}");
 } else {

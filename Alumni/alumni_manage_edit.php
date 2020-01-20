@@ -41,7 +41,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
     $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
     $alumniAlumnusID = isset($_GET['alumniAlumnusID'])? $_GET['alumniAlumnusID'] : '';
 
-    if (empty($alumniAlumnusID)) { 
+    if (empty($alumniAlumnusID)) {
         echo "<div class='error'>";
         echo __('You have not specified one or more required parameters.');
         echo '</div>';
@@ -83,7 +83,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
             $row = $form->addRow();
                 $row->addLabel('firstName', __('First Name'));
                 $row->addTextField('firstName')->isRequired()->maxLength(30);
-                
+
             $row = $form->addRow();
                 $row->addLabel('surname', __('Surname'));
                 $row->addTextField('surname')->isRequired()->maxLength(30);
@@ -103,7 +103,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
             $row = $form->addRow();
                 $row->addLabel('dob', __('Date of Birth'));
                 $row->addDate('dob');
-                
+
             $formerRoles = array(
                 'Student' => __('Student'),
                 'Staff' => __('Staff'),
@@ -146,9 +146,11 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
 
             $form->addRow()->addHeading(__('Link To Gibbon User'));
 
+            $data = array('gibbonSchoolYearID' => $_SESSION[$guid]['gibbonSchoolYearID']);
+            $sql = "SELECT gibbonPersonID AS value, CONCAT(surname, ', ', preferredName, ' (', username, ')') AS name FROM gibbonPerson ORDER BY surname, preferredName";
             $row = $form->addRow();
                 $row->addLabel('gibbonPersonID', __('Existing User'));
-                $row->addSelectUsers('gibbonPersonID')->placeholder();
+                $row->addSelect('gibbonPersonID')->fromQuery($pdo, $sql, $data)->placeholder();
 
             $row = $form->addRow();
                 $row->addFooter();

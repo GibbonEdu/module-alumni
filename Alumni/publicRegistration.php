@@ -20,21 +20,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 use Gibbon\Forms\Form;
 use Gibbon\Forms\DatabaseFormFactory;
 
-$proceed = false;
+$enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
+$loggedIn = (isset($_SESSION[$guid]['username'])) ? true : false;
 
-if (isset($_SESSION[$guid]['username']) == false) {
-    $enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
-    if ($enablePublicRegistration == 'Y') {
-        $proceed = true;
-    }
-}
-
-if ($proceed == false) {
+if ($enablePublicRegistration != "Y") {
     //Acess denied
     echo "<div class='error'>";
     echo __('You do not have access to this action.');
     echo '</div>';
-} else {
+}
+else if ($enablePublicRegistration && $loggedIn) {
+    echo "<div class='warning'>";
+    echo __('You need to log out in order to access this action.');
+    echo '</div>';
+}
+else {
     //Proceed!
     $page->breadcrumbs->add(__('{orgName} Alumni Registration', [
         'orgName' => $_SESSION[$guid]['organisationNameShort'] ?? ''
@@ -45,7 +45,7 @@ if ($proceed == false) {
     $returns = array();
     $returns['error5'] = sprintf(__('Your request failed because you do not meet the minimum age for joining this site (%1$s years of age).'), $publicRegistrationMinimumAge);
     $returns['error7'] = __('Your request failed because the specified email address has already been registered');
-    $returns['success0'] = __('Your registration was successfully submitted: a member of our alumni team will be in touch shortly.');
+    $returns['success0'] = __('Your registration was successfully submitted: a member of our alumni team will be in touch.');
     $editLink = '';
     if (isset($_GET['editID'])) {
         $editLink = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];

@@ -1,5 +1,10 @@
 CHANGELOG
 =========
+v0.6.01
+-------
+Improved feedback to logged in users attempting to register
+Adjusted Existing User field to show all users
+
 v0.6.00
 -------
 Email uniqueness check on public registration
