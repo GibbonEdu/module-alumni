@@ -1,5 +1,12 @@
 CHANGELOG
 =========
+v1.0.00
+-------
+Refatored code
+Support to multilanguage
+Changed setting/link Facebook page to Social Network page
+Settings Social Network link and Show Public Registration in the interface.
+
 v0.6.01
 -------
 Improved feedback to logged in users attempting to register

@@ -18,41 +18,37 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 use Gibbon\Services\Format;
+use Gibbon\Module\Alumni\AlumniGateway;
 
 include '../../gibbon.php';
 
-$URL = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/publicRegistration.php';
+$URL = $gibbon->session->get('absoluteURL').'/index.php?q=/modules/Alumni/publicRegistration.php';
 
 $enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
-$loggedIn = (isset($_SESSION[$guid]['username'])) ? true : false;
+$loggedIn = $gibbon->session->get('username') ?? '';
 
-if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && $loggedIn)) {
+if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && !empty($loggedIn))) {
     $URL .= '&return=error0';
     header("Location: {$URL}");
 } else {
     //Proceed!
-    $title = $_POST['title'];
-    $surname = $_POST['surname'];
-    $firstName = $_POST['firstName'];
-    $officialName = $_POST['officialName'];
-    $maidenName = $_POST['maidenName'];
-    $gender = $_POST['gender'];
-    $username = $_POST['username2'];
-    $dob = $_POST['dob'];
-    if ($dob == '') {
-        $dob = null;
-    } else {
-        $dob = dateConvert($guid, $dob);
-    }
-    $email = $_POST['email'];
-    $address1Country = $_POST['address1Country'];
-    $profession = $_POST['profession'];
-    $employer = $_POST['employer'];
+    $title = $_POST['title'] ?? '';
+    $surname = $_POST['surname'] ?? '';
+    $firstName = $_POST['firstName'] ?? '';
+    $officialName = $_POST['officialName'] ?? '';
+    $maidenName = $_POST['maidenName'] ?? '';
+    $gender = $_POST['gender'] ?? '';
+    $username = $_POST['username2'] ?? '';
+    $dob = $_POST['dob'] ? Format::dateConvert($_POST['dob']) : '';
+    $email = $_POST['email'] ?? '';
+    $address1Country = $_POST['address1Country'] ?? '';
+    $profession = $_POST['profession'] ?? '';
+    $employer = $_POST['employer'] ?? '';
     $jobTitle = $_POST['jobTitle'];
-    $graduatingYear = (empty($_POST['graduatingYear']) ? null : $_POST['graduatingYear']);
+    $graduatingYear = $_POST['graduatingYear'] ?? '';
     $formerRole = $_POST['formerRole'];
 
-    if ($surname == '' or $firstName == '' or $officialName == '' or $gender == '' or $dob == '' or $email == '' or $formerRole == '') {
+    if (empty($surname) or empty($firstName) or empty($officialName) or empty($gender) or empty($dob) or empty($email) or empty($formerRole)) {
         //Fail 3
         $URL .= '&return=error3';
         header("Location: {$URL}");
@@ -60,11 +56,12 @@ if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && $loggedIn)
         //Check publicRegistrationMinimumAge
         $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
 
-        $ageFail = false;
-        if ($publicRegistrationMinimumAge == '') {
+        if (empty($publicRegistrationMinimumAge)) {
             $ageFail = true;
         } elseif ($publicRegistrationMinimumAge > 0 and $publicRegistrationMinimumAge > (new DateTime('@'.Format::timestamp($dob)))->diff(new DateTime())->y) {
             $ageFail = true;
+        } else {
+            $ageFail = false;
         }
 
         if ($ageFail == true) {
@@ -72,39 +69,22 @@ if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && $loggedIn)
             $URL .= '&return=error5';
             header("Location: {$URL}");
         } else {
+            $alumniGateway = $container->get(AlumniGateway::class);
             //Check for uniqueness of username
-            try {
-                $data = array('email' => $email);
-                $sql = 'SELECT email FROM alumniAlumnus WHERE email=:email';
-                $result = $connection2->prepare($sql);
-                $result->execute($data);
-            } catch (PDOException $e) {
-                //Fail 2
-                $URL .= 'return=error2';
-                header("Location: {$URL}");
-                exit();
-            }
+            $existEmail = $alumniGateway->selectBy(['email' => $email])->fetch();
 
-            if ($result->rowCount() > 0) {
+            if (!empty($existEmail)) {
                 //Fail 7
                 $URL .= '&return=error7';
                 header("Location: {$URL}");
                 exit();
             }
             else {
-
                 //Write to database
-                try {
-                    $data = array('title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole);
-                    $sql = 'INSERT INTO alumniAlumnus SET title=:title, surname=:surname, firstName=:firstName, officialName=:officialName, maidenName=:maidenName, gender=:gender, username=:username, dob=:dob, email=:email, address1Country=:address1Country, profession=:profession, employer=:employer, jobTitle=:jobTitle, graduatingYear=:graduatingYear, formerRole=:formerRole';
-                    $result = $connection2->prepare($sql);
-                    $result->execute($data);
-                } catch (PDOException $e) {
-                    //Fail 2
-                    $URL .= 'return=error2';
-                    header("Location: {$URL}");
-                    exit();
-                }
+                $fields = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole];
+                $dataAlumni = array_filter($fields, function($field) { return !empty($field[0]); });
+                
+                $alumniGateway->insert($dataAlumni);
 
                 //Success 0
                 $URL .= '&return=success0';

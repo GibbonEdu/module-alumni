@@ -19,144 +19,131 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use Gibbon\Forms\Form;
 use Gibbon\Forms\DatabaseFormFactory;
+use Gibbon\Module\Alumni\AlumniGateway;
 
 //Module includes
-include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
+include './modules/'.$gibbon->session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.php') == false) {
     //Acess denied
-    echo "<div class='error'>";
-    echo __('You do not have access to this action.');
-    echo '</div>';
+    $page->addError(__m('You do not have access to this action.'));
 } else {
     //Proceed!
     $page->breadcrumbs
-      ->add(__('Manage Alumni'), 'alumni_manage.php')
-      ->add(__('Edit'));
+      ->add(__m('Manage Alumni'), 'alumni_manage.php')
+      ->add(__m('Edit'));
 
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], null, null);
     }
 
-    $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
-    $alumniAlumnusID = isset($_GET['alumniAlumnusID'])? $_GET['alumniAlumnusID'] : '';
+    $graduatingYear = $_GET['graduatingYear'] ?? '';
+    $alumniAlumnusID = $_GET['alumniAlumnusID'] ?? '';
 
     if (empty($alumniAlumnusID)) {
-        echo "<div class='error'>";
-        echo __('You have not specified one or more required parameters.');
-        echo '</div>';
+        $page->addError(__m('You have not specified one or more required parameters.'));
     } else {
-        try {
-            $data = array('alumniAlumnusID' => $alumniAlumnusID);
-            $sql = 'SELECT alumniAlumnus.* FROM alumniAlumnus WHERE alumniAlumnusID=:alumniAlumnusID';
-            $result = $connection2->prepare($sql);
-            $result->execute($data);
-        } catch (PDOException $e) {
-            echo "<div class='error'>".$e->getMessage().'</div>';
-        }
+        //Let's go!
+        $AlumniGateway = $container->get(AlumniGateway::class);
+        
+        $alumni = $AlumniGateway->getByID($alumniAlumnusID);
 
-        if ($result->rowCount() != 1) {
-            echo "<div class='error'>";
-            echo __('The selected record does not exist, or you do not have access to it.');
-            echo '</div>';
+        if (empty($alumni)) {
+            $page->addError(__m('The selected record does not exist, or you do not have access to it.'));
         } else {
-            if ($graduatingYear != '') {
-                echo "<div class='linkTop'>";
-                  echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$graduatingYear."'>".__('Back to Search Results').'</a>';
-                echo '</div>';
+            if (!empty($graduatingYear)) { 
+                $form->addHeaderAction('back', __m('Back to Search Results'))
+                    ->setURL('/modules/Alumni/alumni_manage.php')
+                    ->addParam('graduatingYear', $graduatingYear)
+                    ->displayLabel();
             }
 
-            //Let's go!
-            $values = $result->fetch();
-
-            $form = Form::create('action', $_SESSION[$guid]['absoluteURL'].'/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_editProcess.php?alumniAlumnusID='.$alumniAlumnusID.'&graduatingYear='.$graduatingYear);
+            $form = Form::create('action', $gibbon->session->get('absoluteURL').'/modules/'.$gibbon->session->get('module').'/alumni_manage_editProcess.php?alumniAlumnusID='.$alumniAlumnusID.'&graduatingYear='.$graduatingYear);
             $form->setFactory(DatabaseFormFactory::create($pdo));
 
-            $form->addHiddenValue('address', $_SESSION[$guid]['address']);
+            $form->addHiddenValue('address', $gibbon->session->get('address'));
 
-            $form->addRow()->addHeading(__('Personal Details'));
+            $form->addRow()->addHeading(__m('Personal Details'));
 
             $row = $form->addRow();
-                $row->addLabel('title', __('Title'));
+                $row->addLabel('title', __m('Title'));
                 $row->addSelectTitle('title');
 
             $row = $form->addRow();
-                $row->addLabel('firstName', __('First Name'));
+                $row->addLabel('firstName', __m('First Name'));
                 $row->addTextField('firstName')->isRequired()->maxLength(30);
 
             $row = $form->addRow();
-                $row->addLabel('surname', __('Surname'));
+                $row->addLabel('surname', __m('Surname'));
                 $row->addTextField('surname')->isRequired()->maxLength(30);
 
             $row = $form->addRow();
-                $row->addLabel('officialName', __('Official Name'))->description(__('Full name as shown in ID documents.'));
+                $row->addLabel('officialName', __m('Official Name'))->description(__m('Full name as shown in ID documents.'));
                 $row->addTextField('officialName')->maxLength(150);
 
             $row = $form->addRow();
-                $row->addLabel('email', __('Email'));
+                $row->addLabel('email', __m('Email'));
                 $email = $row->addEmail('email')->isRequired()->maxLength(50);
 
             $row = $form->addRow();
-                $row->addLabel('gender', __('Gender'));
+                $row->addLabel('gender', __m('Gender'));
                 $row->addSelectGender('gender')->isRequired();
 
             $row = $form->addRow();
-                $row->addLabel('dob', __('Date of Birth'));
+                $row->addLabel('dob', __m('Date of Birth'));
                 $row->addDate('dob');
 
-            $formerRoles = array(
-                'Student' => __('Student'),
-                'Staff' => __('Staff'),
-                'Parent' => __('Parent'),
-                'Other' => __('Other'),
-            );
+            $formerRoles = [
+                'Student' => __m('Student'),
+                'Staff' => __m('Staff'),
+                'Parent' => __m('Parent'),
+                'Other' => __m('Other'),
+            ];
             $row = $form->addRow();
-                $row->addLabel('formerRole', __('Main Role'))->description(__('In what way, primarily, were you involved with the school?'));
+                $row->addLabel('formerRole', __m('Main Role'))->description(__m('In what way, primarily, were you involved with the school?'));
                 $row->addSelect('formerRole')->fromArray($formerRoles)->isRequired()->placeholder();
 
-            $form->addRow()->addHeading(__('Tell Us More About Yourself'));
+            $form->addRow()->addHeading(__m('Tell Us More About Yourself'));
 
             $row = $form->addRow();
-                $row->addLabel('maidenName', __('Maiden Name'))->description(__('Your surname prior to marriage.'));
+                $row->addLabel('maidenName', __m('Maiden Name'))->description(__m('Your surname prior to marriage.'));
                 $row->addTextField('maidenName')->maxLength(30);
 
             $row = $form->addRow();
-                $row->addLabel('username', __('Username'))->description(__('If you are young enough, this is how you logged into computers.'));
+                $row->addLabel('username', __m('Username'))->description(__m('If you are young enough, this is how you logged into computers.'));
                 $row->addTextField('username')->maxLength(20);
 
             $row = $form->addRow();
-                $row->addLabel('graduatingYear', __('Graduating Year'));
+                $row->addLabel('graduatingYear', __m('Graduating Year'));
                 $row->addSelect('graduatingYear')->fromArray(range(date('Y'), date('Y')-100, -1))->selected($graduatingYear)->placeholder();
 
             $row = $form->addRow();
-                $row->addLabel('address1Country', __('Current Country of Residence'));
+                $row->addLabel('address1Country', __m('Current Country of Residence'));
                 $row->addSelectCountry('address1Country')->placeholder('');
 
             $row = $form->addRow();
-                $row->addLabel('profession', __('Profession'));
+                $row->addLabel('profession', __m('Profession'));
                 $row->addTextField('profession')->maxLength(30);
 
             $row = $form->addRow();
-                $row->addLabel('employer', __('Employer'));
+                $row->addLabel('employer', __m('Employer'));
                 $row->addTextField('employer')->maxLength(30);
 
             $row = $form->addRow();
-                $row->addLabel('jobTitle', __('Job Title'));
+                $row->addLabel('jobTitle', __m('Job Title'));
                 $row->addTextField('jobTitle')->maxLength(30);
 
-            $form->addRow()->addHeading(__('Link To Gibbon User'));
+            $form->addRow()->addHeading(__m('Link To Gibbon User'));
 
-            $data = array('gibbonSchoolYearID' => $_SESSION[$guid]['gibbonSchoolYearID']);
-            $sql = "SELECT gibbonPersonID AS value, CONCAT(surname, ', ', preferredName, ' (', username, ')') AS name FROM gibbonPerson ORDER BY surname, preferredName";
             $row = $form->addRow();
-                $row->addLabel('gibbonPersonID', __('Existing User'));
-                $row->addSelect('gibbonPersonID')->fromQuery($pdo, $sql, $data)->placeholder();
+                $row->addLabel('gibbonPersonID', __m('Existing User'));
+                $row->addSelectUsers('gibbonPersonID', $gibbon->session->get('gibbonSchoolYearID'))->placeHolder();
 
             $row = $form->addRow();
                 $row->addFooter();
                 $row->addSubmit();
 
-            $form->loadAllValuesFrom($values);
+            $form->loadAllValuesFrom($alumni);
 
             echo $form->getOutput();
         }
