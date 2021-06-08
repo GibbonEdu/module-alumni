@@ -21,7 +21,7 @@ use Gibbon\Forms\Form;
 use Gibbon\Forms\DatabaseFormFactory;
 
 $enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
-$loggedIn = (isset($_SESSION[$guid]['username'])) ? true : false;
+$loggedIn = $session->has('username') ? true : false;
 
 if ($enablePublicRegistration != "Y") {
     //Acess denied
@@ -37,7 +37,7 @@ else if ($enablePublicRegistration && $loggedIn) {
 else {
     //Proceed!
     $page->breadcrumbs->add(__('{orgName} Alumni Registration', [
-        'orgName' => $_SESSION[$guid]['organisationNameShort'] ?? ''
+        'orgName' => $session->get('organisationNameShort') ?? ''
     ]));
 
     $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
@@ -48,7 +48,7 @@ else {
     $returns['success0'] = __('Your registration was successfully submitted: a member of our alumni team will be in touch.');
     $editLink = '';
     if (isset($_GET['editID'])) {
-        $editLink = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];
+        $editLink = $session->get('absoluteURL').'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];
     }
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], $editLink, $returns);
@@ -56,16 +56,16 @@ else {
     ?>
 	<p>
 		<?php
-        echo sprintf(__('This registration form is for former members of the %1$s community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.'), $_SESSION[$guid]['organisationNameShort']);
+        echo sprintf(__('This registration form is for former members of the %1$s community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.'), $session->get('organisationNameShort'));
     $facebookLink = getSettingByScope($connection2, 'Alumni', 'facebookLink');
     if ($facebookLink != '') {
         echo ' '.sprintf(__('Please don\'t forget to take a look at, and like, our alumni %1$sFacebook page%2$s.'), "<a href='".htmlPrep($facebookLink)."' target='_blank'>", '</a>');
     }
 
-    $form = Form::create('action', $_SESSION[$guid]['absoluteURL'].'/modules/Alumni/publicRegistrationProcess.php');
+    $form = Form::create('action', $session->get('absoluteURL').'/modules/Alumni/publicRegistrationProcess.php');
     $form->setFactory(DatabaseFormFactory::create($pdo));
 
-    $form->addHiddenValue('address', $_SESSION[$guid]['address']);
+    $form->addHiddenValue('address', $session->get('address'));
 
     $form->addRow()->addHeading(__('Personal Details'));
 

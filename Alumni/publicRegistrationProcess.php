@@ -21,10 +21,10 @@ use Gibbon\Services\Format;
 
 include '../../gibbon.php';
 
-$URL = $_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/publicRegistration.php';
+$URL = $session->get('absoluteURL').'/index.php?q=/modules/Alumni/publicRegistration.php';
 
 $enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
-$loggedIn = (isset($_SESSION[$guid]['username'])) ? true : false;
+$loggedIn = $session->has('username') ? true : false;
 
 if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && $loggedIn)) {
     $URL .= '&return=error0';
