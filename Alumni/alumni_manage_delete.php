@@ -62,7 +62,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delet
 
             if ($_GET['graduatingYear'] != '') {
                 echo "<div class='linkTop'>";
-                echo "<a href='".$session0->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$_GET['graduatingYear']."'>".__('Back to Search Results').'</a>';
+                echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$_GET['graduatingYear']."'>".__('Back to Search Results').'</a>';
                 echo '</div>';
             }
 
