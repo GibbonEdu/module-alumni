@@ -21,7 +21,7 @@ use Gibbon\Forms\Form;
 use Gibbon\Services\Format;
 
 //Module includes
-include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php') == false) {
     //Acess denied
@@ -41,10 +41,10 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
     echo __('Filter');
     echo '</h3>';
 
-    $form = Form::create('search', $_SESSION[$guid]['absoluteURL'].'/index.php', 'get');
+    $form = Form::create('search', $session->get('absoluteURL').'/index.php', 'get');
     $form->setClass('noIntBorder fullWidth');
 
-    $form->addHiddenValue('q', '/modules/'.$_SESSION[$guid]['module'].'/alumni_manage.php');
+    $form->addHiddenValue('q', '/modules/'.$session->get('module').'/alumni_manage.php');
 
     $row = $form->addRow();
         $row->addLabel('graduatingYear', __('Graduating Year'));
@@ -85,18 +85,18 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         $result->execute($data);
     } catch (PDOException $e) { echo "<div class='error'>".$e->getMessage().'</div>';
     }
-    $sqlPage = $sql.' LIMIT '.$_SESSION[$guid]['pagination'].' OFFSET '.(($page - 1) * $_SESSION[$guid]['pagination']);
+    $sqlPage = $sql.' LIMIT '.$session->get('pagination').' OFFSET '.(($page - 1) * $session->get('pagination'));
 
     echo "<div class='linkTop'>";
-    echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module']."/alumni_manage_add.php&graduatingYear=$graduatingYear'>".__('Add')."<img style='margin: 0 0 -4px 5px' title='".__('Add')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/page_new.png'/></a>";
+    echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/'.$session->get('module')."/alumni_manage_add.php&graduatingYear=$graduatingYear'>".__('Add')."<img style='margin: 0 0 -4px 5px' title='".__('Add')."' src='./themes/".$session->get('gibbonThemeName')."/img/page_new.png'/></a>";
     echo '</div>';
 
     if ($result->rowCount() < 1) { echo "<div class='error'>";
         echo __('There are no records to display.');
         echo '</div>';
     } else {
-        if ($result->rowCount() > $_SESSION[$guid]['pagination']) {
-            printPagination($guid, $result->rowCount(), $page, $_SESSION[$guid]['pagination'], 'top', "graduatingYear=$graduatingYear");
+        if ($result->rowCount() > $session->get('pagination')) {
+            printPagination($guid, $result->rowCount(), $page, $session->get('pagination'), 'top', "graduatingYear=$graduatingYear");
         }
 
         echo "<table cellspacing='0' style='width: 100%'>";
@@ -143,8 +143,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			echo $row['graduatingYear'];
 			echo '</td>';
 			echo '<td>';
-			echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__('Edit')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/config.png'/></a> ";
-			echo "<a class='thickbox' href='".$_SESSION[$guid]['absoluteURL'].'/fullscreen.php?q=/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear&width=650&height=135'><img title='".__('Delete')."' src='./themes/".$_SESSION[$guid]['gibbonThemeName']."/img/garbage.png'/></a> ";
+			echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/'.$session->get('module').'/alumni_manage_edit.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear'><img title='".__('Edit')."' src='./themes/".$session->get('gibbonThemeName')."/img/config.png'/></a> ";
+			echo "<a class='thickbox' href='".$session->get('absoluteURL').'/fullscreen.php?q=/modules/'.$session->get('module').'/alumni_manage_delete.php&alumniAlumnusID='.$row['alumniAlumnusID']."&graduatingYear=$graduatingYear&width=650&height=135'><img title='".__('Delete')."' src='./themes/".$session->get('gibbonThemeName')."/img/garbage.png'/></a> ";
 			echo "<script type='text/javascript'>";
 			echo '$(document).ready(function(){';
 			echo "\$(\".comment-$count\").hide();";
@@ -154,7 +154,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 			echo '});';
 			echo '});';
 			echo '</script>';
-			echo "<a title='".__('View Details')."' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='".$_SESSION[$guid]['absoluteURL']."/themes/Default/img/page_down.png' alt='".__('View Details')."' onclick='return false;' /></a>";
+			echo "<a title='".__('View Details')."' class='show_hide-$count' onclick='false' href='#'><img style='padding-right: 5px' src='".$session->get('absoluteURL')."/themes/Default/img/page_down.png' alt='".__('View Details')."' onclick='return false;' /></a>";
 			echo '</td>';
 			echo '</tr>';
 			echo "<tr class='comment-$count' id='comment-$count'>";
@@ -182,8 +182,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 		}
         echo '</table>';
 
-        if ($result->rowCount() > $_SESSION[$guid]['pagination']) {
-            printPagination($guid, $result->rowCount(), $page, $_SESSION[$guid]['pagination'], 'bottom', "graduatingYear=$graduatingYear");
+        if ($result->rowCount() > $session->get('pagination')) {
+            printPagination($guid, $result->rowCount(), $page, $session->get('pagination'), 'bottom', "graduatingYear=$graduatingYear");
         }
     }
 }

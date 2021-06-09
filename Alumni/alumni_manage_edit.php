@@ -21,7 +21,7 @@ use Gibbon\Forms\Form;
 use Gibbon\Forms\DatabaseFormFactory;
 
 //Module includes
-include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.php') == false) {
     //Acess denied
@@ -62,17 +62,17 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
         } else {
             if ($graduatingYear != '') {
                 echo "<div class='linkTop'>";
-                  echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$graduatingYear."'>".__('Back to Search Results').'</a>';
+                  echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$graduatingYear."'>".__('Back to Search Results').'</a>';
                 echo '</div>';
             }
 
             //Let's go!
             $values = $result->fetch();
 
-            $form = Form::create('action', $_SESSION[$guid]['absoluteURL'].'/modules/'.$_SESSION[$guid]['module'].'/alumni_manage_editProcess.php?alumniAlumnusID='.$alumniAlumnusID.'&graduatingYear='.$graduatingYear);
+            $form = Form::create('action', $session->get('absoluteURL').'/modules/'.$session->get('module').'/alumni_manage_editProcess.php?alumniAlumnusID='.$alumniAlumnusID.'&graduatingYear='.$graduatingYear);
             $form->setFactory(DatabaseFormFactory::create($pdo));
 
-            $form->addHiddenValue('address', $_SESSION[$guid]['address']);
+            $form->addHiddenValue('address', $session->get('address'));
 
             $form->addRow()->addHeading(__('Personal Details'));
 
@@ -146,7 +146,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
 
             $form->addRow()->addHeading(__('Link To Gibbon User'));
 
-            $data = array('gibbonSchoolYearID' => $_SESSION[$guid]['gibbonSchoolYearID']);
+            $data = array('gibbonSchoolYearID' => $session->get('gibbonSchoolYearID'));
             $sql = "SELECT gibbonPersonID AS value, CONCAT(surname, ', ', preferredName, ' (', username, ')') AS name FROM gibbonPerson ORDER BY surname, preferredName";
             $row = $form->addRow();
                 $row->addLabel('gibbonPersonID', __('Existing User'));

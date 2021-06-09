@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 use Gibbon\Forms\Prefab\DeleteForm;
 
 //Module includes
-include './modules/'.$_SESSION[$guid]['module'].'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delete.php') == false) {
     //Acess denied
@@ -62,11 +62,11 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delet
 
             if ($_GET['graduatingYear'] != '') {
                 echo "<div class='linkTop'>";
-                echo "<a href='".$_SESSION[$guid]['absoluteURL'].'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$_GET['graduatingYear']."'>".__('Back to Search Results').'</a>';
+                echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$_GET['graduatingYear']."'>".__('Back to Search Results').'</a>';
                 echo '</div>';
             }
 
-            $form = DeleteForm::createForm($_SESSION[$guid]['absoluteURL'].'/modules/'.$_SESSION[$guid]['module']."/alumni_manage_deleteProcess.php?alumniAlumnusID=$alumniAlumnusID&graduatingYear=".$_GET['graduatingYear']);
+            $form = DeleteForm::createForm($session->get('absoluteURL').'/modules/'.$session->get('module')."/alumni_manage_deleteProcess.php?alumniAlumnusID=$alumniAlumnusID&graduatingYear=".$_GET['graduatingYear']);
             echo $form->getOutput();
         }
     }
