@@ -25,7 +25,7 @@ use Gibbon\Domain\System\SettingGateway;
 $settingGateway = $container->get(SettingGateway::class);
 $enablePublicRegistration = $settingGateway->getSettingByScope('Alumni', 'showPublicRegistration');
     
-$loggedIn = $gibbon->session->get('username') ?? '';
+$loggedIn = $session->has('username');
 
 if ($enablePublicRegistration != "Y") {
     //Acess denied
@@ -37,7 +37,7 @@ else if ($enablePublicRegistration and !empty($loggedIn)) {
 else {
     //Proceed!
     $page->breadcrumbs->add(__m('{orgName} Alumni Registration', [
-        'orgName' => $gibbon->session->get('organisationNameShort') ?? ''
+        'orgName' => $session->get('organisationNameShort') ?? ''
     ]));
 
     $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
@@ -48,14 +48,14 @@ else {
     $returns['success0'] = __m('Your registration was successfully submitted: a member of our alumni team will be in touch.');
     $editLink = '';
     if (isset($_GET['editID'])) {
-        $editLink = $gibbon->session->get('absoluteURL').'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];
+        $editLink = $session->get('absoluteURL').'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];
     }
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], $editLink, $returns);
     }
 
     $page->write(__m("This registration form is for former members of the {orgName} community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.", 
-    ['orgName' => $gibbon->session->get('organisationNameShort')]));
+    ['orgName' => $session->get('organisationNameShort')]));
     
     $socialNetworkLink = $settingGateway->getSettingByScope('Alumni', 'socialNetworkLink');
     if (!empty($socialNetworkLink)) {
@@ -63,10 +63,10 @@ else {
                 ['socialNetworkLink' => Format::link($socialNetworkLink, __m('alumni Social Network page'), ['target' => '_blank'])]));
     }
 
-    $form = Form::create('action', $gibbon->session->get('absoluteURL').'/modules/Alumni/publicRegistrationProcess.php');
+    $form = Form::create('action', $session->get('absoluteURL').'/modules/Alumni/publicRegistrationProcess.php');
     $form->setFactory(DatabaseFormFactory::create($pdo));
 
-    $form->addHiddenValue('address', $gibbon->session->get('address'));
+    $form->addHiddenValue('address', $session->get('address'));
 
     $form->addRow()->addHeading(__m('Personal Details'));
 

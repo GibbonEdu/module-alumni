@@ -23,7 +23,7 @@ use Gibbon\Tables\DataTable;
 use Gibbon\Module\Alumni\AlumniGateway;
 
 //Module includes
-include './modules/'.$gibbon->session->get('module').'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php') == false) {
     //Acess denied
@@ -37,11 +37,11 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 
     $graduatingYear = $_GET['graduatingYear'] ?? '';
 
-    $form = Form::create('search', $gibbon->session->get('absoluteURL').'/index.php', 'get');
+    $form = Form::create('search', $session->get('absoluteURL').'/index.php', 'get');
     $form->setTitle(__m('Filter'));
     $form->setClass('noIntBorder fullWidth');
 
-    $form->addHiddenValue('q', '/modules/'.$gibbon->session->get('module').'/alumni_manage.php');
+    $form->addHiddenValue('q', '/modules/'.$session->get('module').'/alumni_manage.php');
 
     $row = $form->addRow();
         $row->addLabel('graduatingYear', __m('Graduating Year'));
@@ -51,6 +51,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         $row->addSearchSubmit($gibbon->session, __m('Clear Search'));
 
     echo $form->getOutput();
+
 
     $gatewayAlumni = $container->get(AlumniGateway::class);
     $criteria = $gatewayAlumni->newQueryCriteria(true)
@@ -115,7 +116,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
                     if (!empty($alumniRow[$attribute])) {
                         $details .= Format::bold(__m($label).': ');
                         $details .= Format::date($alumniRow[$attribute]).'<br/>';
-			}
+
+                    }
                     break;
                 case 'gender':
                     $details .= Format::bold(__m($label).': ');
@@ -125,9 +127,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
                     if (!empty($alumniRow[$attribute])) {
                         $details .= Format::bold(__m($label).': ');
                         $details .= $alumniRow[$attribute].'<br/>';
-			}
-		}
-
+			              }
+            }
         }
         return $details;
     });

@@ -21,7 +21,7 @@ use Gibbon\Forms\Prefab\DeleteForm;
 use Gibbon\Module\Alumni\AlumniGateway;
 
 //Module includes
-include './modules/'.$gibbon->session->get('module').'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delete.php') == false) {
     //Acess denied
@@ -58,7 +58,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delet
                     ->displayLabel();
             }
 
-            $form = DeleteForm::createForm($gibbon->session->get('absoluteURL').'/modules/'.$gibbon->session->get('module')."/alumni_manage_deleteProcess.php?alumniAlumnusID=$alumniAlumnusID&graduatingYear=".$alumni['graduatingYear']);
+            $form = DeleteForm::createForm($session->get('absoluteURL').'/modules/'.$session->get('module')."/alumni_manage_deleteProcess.php?alumniAlumnusID=$alumniAlumnusID&graduatingYear=".$alumni['graduatingYear']);
+
             echo $form->getOutput();
         }
     }

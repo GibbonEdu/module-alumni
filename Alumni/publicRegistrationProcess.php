@@ -22,10 +22,10 @@ use Gibbon\Module\Alumni\AlumniGateway;
 
 include '../../gibbon.php';
 
-$URL = $gibbon->session->get('absoluteURL').'/index.php?q=/modules/Alumni/publicRegistration.php';
+$URL = $session->get('absoluteURL').'/index.php?q=/modules/Alumni/publicRegistration.php';
 
 $enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
-$loggedIn = $gibbon->session->get('username') ?? '';
+$loggedIn = $session->has('username');
 
 if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && !empty($loggedIn))) {
     $URL .= '&return=error0';

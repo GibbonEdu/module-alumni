@@ -22,7 +22,7 @@ use Gibbon\Forms\DatabaseFormFactory;
 use Gibbon\Module\Alumni\AlumniGateway;
 
 //Module includes
-include './modules/'.$gibbon->session->get('module').'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.php') == false) {
     //Acess denied
@@ -58,10 +58,10 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
                     ->displayLabel();
             }
 
-            $form = Form::create('action', $gibbon->session->get('absoluteURL').'/modules/'.$gibbon->session->get('module').'/alumni_manage_editProcess.php?alumniAlumnusID='.$alumniAlumnusID.'&graduatingYear='.$graduatingYear);
+            $form = Form::create('action', $session->get('absoluteURL').'/modules/'.$session->get('module').'/alumni_manage_editProcess.php?alumniAlumnusID='.$alumniAlumnusID.'&graduatingYear='.$graduatingYear);
             $form->setFactory(DatabaseFormFactory::create($pdo));
 
-            $form->addHiddenValue('address', $gibbon->session->get('address'));
+            $form->addHiddenValue('address', $session->get('address'));
 
             $form->addRow()->addHeading(__m('Personal Details'));
 
@@ -134,7 +134,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
                 $row->addTextField('jobTitle')->maxLength(30);
 
             $form->addRow()->addHeading(__m('Link To Gibbon User'));
-
+          
             $row = $form->addRow();
                 $row->addLabel('gibbonPersonID', __m('Existing User'));
                 $row->addSelectUsers('gibbonPersonID', $gibbon->session->get('gibbonSchoolYearID'))->placeHolder();

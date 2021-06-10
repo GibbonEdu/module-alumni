@@ -21,7 +21,7 @@ use Gibbon\Forms\Form;
 use Gibbon\Forms\DatabaseFormFactory;
 
 //Module includes
-include './modules/'.$gibbon->session->get('module').'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.php') == false) {
     //Acess denied
@@ -36,13 +36,13 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 
     $editLink = '';
     if (isset($_GET['editID'])) {
-        $editLink = $gibbon->session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage_edit.php&alumniAlumnusID='.$_GET['editID'].'&graduatingYear='.$graduatingYear;
+        $editLink = $session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage_edit.php&alumniAlumnusID='.$_GET['editID'].'&graduatingYear='.$graduatingYear;
     }
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], $editLink, null);
     }
 
-    $form = Form::create('action', $gibbon->session->get('absoluteURL').'/modules/'.$gibbon->session->get('module').'/alumni_manage_addProcess.php?graduatingYear='.$graduatingYear);
+    $form = Form::create('action', $session->get('absoluteURL').'/modules/'.$session->get('module').'/alumni_manage_addProcess.php?graduatingYear='.$graduatingYear);
     $form->setFactory(DatabaseFormFactory::create($pdo));
     
     if (!empty($graduatingYear)) { 
@@ -52,7 +52,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
             ->displayLabel();
     }
 
-    $form->addHiddenValue('address', $gibbon->session->get('address'));
+    $form->addHiddenValue('address', $session->get('address'));
 
     $form->addRow()->addHeading(__m('Personal Details'));
 
