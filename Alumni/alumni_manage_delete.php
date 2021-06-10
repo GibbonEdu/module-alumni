@@ -18,55 +18,48 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 use Gibbon\Forms\Prefab\DeleteForm;
+use Gibbon\Module\Alumni\AlumniGateway;
 
 //Module includes
 include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delete.php') == false) {
     //Acess denied
-    echo "<div class='error'>";
-    echo __('You do not have access to this action.');
-    echo '</div>';
+    $page->addError(__m('You do not have access to this action.'));
 } else {
     //Proceed!
     $page->breadcrumbs
-      ->add(__('Manage Alumni'), 'alumni_manage.php')
-      ->add(__('Delete'));
+      ->add(__m('Manage Alumni'), 'alumni_manage.php')
+      ->add(__m('Delete'));
 
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], null, null);
     }
 
-    //Check if school year specified
-    $alumniAlumnusID = $_GET['alumniAlumnusID'];
-    if ($alumniAlumnusID == '') { echo "<div class='error'>";
-        echo __('You have not specified one or more required parameters.');
-        echo '</div>';
+    //Check if alumniAlumnusID specified
+    $alumniAlumnusID = $_GET['alumniAlumnusID'] ?? '';
+    $graduatingYear = $_GET['graduatingYear'] ?? '';
+    
+    if (empty($alumniAlumnusID)) { 
+        $page->addError(__m('You have not specified one or more required parameters.'));
     } else {
-        try {
-            $data = array('alumniAlumnusID' => $alumniAlumnusID);
-            $sql = 'SELECT * FROM alumniAlumnus WHERE alumniAlumnusID=:alumniAlumnusID';
-            $result = $connection2->prepare($sql);
-            $result->execute($data);
-        } catch (PDOException $e) {
-            echo "<div class='error'>".$e->getMessage().'</div>';
-        }
+        $alumniGateway = $container->get(AlumniGateway::class);
+        
+        $alumni = $alumniGateway->getByID($alumniAlumnusID);
 
-        if ($result->rowCount() != 1) {
-            echo "<div class='error'>";
-            echo __('The selected record does not exist, or you do not have access to it.');
-            echo '</div>';
+        if (empty($alumni)) {
+            $page->addError(__m('The selected record does not exist, or you do not have access to it.'));
         } else {
             //Let's go!
-            $row = $result->fetch();
-
-            if ($_GET['graduatingYear'] != '') {
-                echo "<div class='linkTop'>";
-                echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$_GET['graduatingYear']."'>".__('Back to Search Results').'</a>';
-                echo '</div>';
+            if (!empty($graduatingYear)) { 
+                $form->addHeaderAction('back', __m('Back to Search Results'))
+                    ->setURL('/modules/Alumni/alumni_manage.php')
+                    ->addParam('graduatingYear', $graduatingYear)
+                    ->displayLabel();
             }
 
-            $form = DeleteForm::createForm($session->get('absoluteURL').'/modules/'.$session->get('module')."/alumni_manage_deleteProcess.php?alumniAlumnusID=$alumniAlumnusID&graduatingYear=".$_GET['graduatingYear']);
+            $form = DeleteForm::createForm($session->get('absoluteURL').'/modules/'.$session->get('module')."/alumni_manage_deleteProcess.php?alumniAlumnusID=$alumniAlumnusID&graduatingYear=".$alumni['graduatingYear']);
+
             echo $form->getOutput();
         }
     }

@@ -14,6 +14,7 @@ For support visit [https://gibbonedu.org/support](https://gibbonedu.org/support)
 
 ## Compatibility
 
+* v1.0.00 only supports Gibbon v20+
 * v0.5.00 only supports Gibbon v17+
 * v0.4.00 supports Gibbon v16
 

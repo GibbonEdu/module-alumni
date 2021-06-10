@@ -25,112 +25,110 @@ include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.php') == false) {
     //Acess denied
-    echo "<div class='error'>";
-    echo __('You do not have access to this action.');
-    echo '</div>';
+    $page->addError(__m('You do not have access to this action.'));
 } else {
     $page->breadcrumbs
-      ->add(__('Manage Alumni'), 'alumni_manage.php')
-      ->add(__('Add'));
+      ->add(__m('Manage Alumni'), 'alumni_manage.php')
+      ->add(__m('Add'));
 
-    $graduatingYear = isset($_GET['graduatingYear'])? $_GET['graduatingYear'] : '';
-    $alumniAlumnusID = isset($_GET['alumniAlumnusID'])? $_GET['alumniAlumnusID'] : '';
+    $graduatingYear = $_GET['graduatingYear'] ?? '';
+    $alumniAlumnusID = $_GET['alumniAlumnusID'] ?? '';
 
     $editLink = '';
     if (isset($_GET['editID'])) {
-        $editLink = $session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage_edit.php&alumniAlumnusID='.$_GET['editID'].'&graduatingYear=' . $graduatingYear;
+        $editLink = $session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage_edit.php&alumniAlumnusID='.$_GET['editID'].'&graduatingYear='.$graduatingYear;
     }
     if (isset($_GET['return'])) {
         returnProcess($guid, $_GET['return'], $editLink, null);
     }
 
-    if ($graduatingYear != '') { echo "<div class='linkTop'>";
-          echo "<a href='".$session->get('absoluteURL').'/index.php?q=/modules/Alumni/alumni_manage.php&graduatingYear='.$graduatingYear."'>".__('Back to Search Results').'</a>';
-        echo '</div>';
-    }
-
     $form = Form::create('action', $session->get('absoluteURL').'/modules/'.$session->get('module').'/alumni_manage_addProcess.php?graduatingYear='.$graduatingYear);
     $form->setFactory(DatabaseFormFactory::create($pdo));
+    
+    if (!empty($graduatingYear)) { 
+        $form->addHeaderAction('back', __m('Back to Search Results'))
+            ->setURL('/modules/Alumni/alumni_manage.php')
+            ->addParam('graduatingYear', $graduatingYear)
+            ->displayLabel();
+    }
 
     $form->addHiddenValue('address', $session->get('address'));
 
-    $form->addRow()->addHeading(__('Personal Details'));
+    $form->addRow()->addHeading(__m('Personal Details'));
 
     $row = $form->addRow();
-        $row->addLabel('title', __('Title'));
+        $row->addLabel('title', __m('Title'));
         $row->addSelectTitle('title');
 
     $row = $form->addRow();
-        $row->addLabel('firstName', __('First Name'));
+        $row->addLabel('firstName', __m('First Name'));
         $row->addTextField('firstName')->isRequired()->maxLength(30);
 
     $row = $form->addRow();
-        $row->addLabel('surname', __('Surname'));
+        $row->addLabel('surname', __m('Surname'));
         $row->addTextField('surname')->isRequired()->maxLength(30);
 
     $row = $form->addRow();
-        $row->addLabel('officialName', __('Official Name'))->description(__('Full name as shown in ID documents.'));
+        $row->addLabel('officialName', __m('Official Name'))->description(__m('Full name as shown in ID documents.'));
         $row->addTextField('officialName')->maxLength(150);
 
     $row = $form->addRow();
-        $row->addLabel('email', __('Email'));
+        $row->addLabel('email', __m('Email'));
         $email = $row->addEmail('email')->isRequired()->maxLength(50);
 
     $row = $form->addRow();
-        $row->addLabel('gender', __('Gender'));
+        $row->addLabel('gender', __m('Gender'));
         $row->addSelectGender('gender')->isRequired();
 
     $row = $form->addRow();
-        $row->addLabel('dob', __('Date of Birth'));
+        $row->addLabel('dob', __m('Date of Birth'));
         $row->addDate('dob');
 
-    $formerRoles = array(
-        'Student' => __('Student'),
-        'Staff' => __('Staff'),
-        'Parent' => __('Parent'),
-        'Other' => __('Other'),
-    );
+    $formerRoles = [
+        'Student' => __m('Student'),
+        'Staff' => __m('Staff'),
+        'Parent' => __m('Parent'),
+        'Other' => __m('Other'),
+    ];
     $row = $form->addRow();
-        $row->addLabel('formerRole', __('Main Role'))->description(__('In what way, primarily, were you involved with the school?'));
+        $row->addLabel('formerRole', __m('Main Role'))->description(__m('In what way, primarily, were you involved with the school?'));
         $row->addSelect('formerRole')->fromArray($formerRoles)->isRequired()->placeholder();
 
-    $form->addRow()->addHeading(__('Tell Us More About Yourself'));
+    $form->addRow()->addHeading(__m('Tell Us More About Yourself'));
 
     $row = $form->addRow();
-        $row->addLabel('maidenName', __('Maiden Name'))->description(__('Your surname prior to marriage.'));
+        $row->addLabel('maidenName', __m('Maiden Name'))->description(__m('Your surname prior to marriage.'));
         $row->addTextField('maidenName')->maxLength(30);
 
     $row = $form->addRow();
-        $row->addLabel('username2', __('Username'))->description(__('If you are young enough, this is how you logged into computers.'));
+        $row->addLabel('username2', __m('Username'))->description(__m('If you are young enough, this is how you logged into computers.'));
         $row->addTextField('username2')->maxLength(20);
 
     $row = $form->addRow();
-        $row->addLabel('graduatingYear', __('Graduating Year'));
+        $row->addLabel('graduatingYear', __m('Graduating Year'));
         $row->addSelect('graduatingYear')->fromArray(range(date('Y'), date('Y')-100, -1))->selected($graduatingYear)->placeholder();
 
     $row = $form->addRow();
-        $row->addLabel('address1Country', __('Current Country of Residence'));
+        $row->addLabel('address1Country', __m('Current Country of Residence'));
         $row->addSelectCountry('address1Country')->placeholder('');
 
     $row = $form->addRow();
-        $row->addLabel('profession', __('Profession'));
+        $row->addLabel('profession', __m('Profession'));
         $row->addTextField('profession')->maxLength(30);
 
     $row = $form->addRow();
-        $row->addLabel('employer', __('Employer'));
+        $row->addLabel('employer', __m('Employer'));
         $row->addTextField('employer')->maxLength(30);
 
     $row = $form->addRow();
-        $row->addLabel('jobTitle', __('Job Title'));
+        $row->addLabel('jobTitle', __m('Job Title'));
         $row->addTextField('jobTitle')->maxLength(30);
 
-    $form->addRow()->addHeading(__('Link To Gibbon User'));
+    $form->addRow()->addHeading(__m('Link To Gibbon User'));
 
-    $data = array('gibbonSchoolYearID' => $session->get('gibbonSchoolYearID'));
-    $sql = "SELECT gibbonPersonID AS value, CONCAT(surname, ', ', preferredName, ' (', username, ')') AS name FROM gibbonPerson ORDER BY surname, preferredName";
     $row = $form->addRow();
-        $row->addLabel('gibbonPersonID', __('Existing User'));
-        $row->addSelect('gibbonPersonID')->fromQuery($pdo, $sql, $data)->placeholder();
+        $row->addLabel('gibbonPersonID', __m('Existing User'));
+        $row->addSelectUsers('gibbonPersonID', $gibbon->session->get('gibbonSchoolYearID'))->placeHolder();
 
     $row = $form->addRow();
         $row->addFooter();
