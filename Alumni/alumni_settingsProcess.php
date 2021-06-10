@@ -20,7 +20,7 @@ use Gibbon\Domain\System\SettingGateway;
 
 include '../../gibbon.php';
 
-$URL = $gibbon->session->get('absoluteURL')."/index.php?q=/modules/".getModuleName($_POST['address'])."/alumni_settings.php";
+$URL = $session->get('absoluteURL')."/index.php?q=/modules/".getModuleName($_POST['address'])."/alumni_settings.php";
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php') == false) {
     //Fail 0

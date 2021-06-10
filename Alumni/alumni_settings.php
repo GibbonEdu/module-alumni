@@ -21,7 +21,7 @@ use Gibbon\Forms\Form;
 use Gibbon\Domain\System\SettingGateway;
 
 //Module includes
-include './modules/'.$gibbon->session->get('module').'/moduleFunctions.php';
+include './modules/'.$session->get('module').'/moduleFunctions.php';
 
 if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php') == false) {
     //Acess denied
@@ -37,9 +37,9 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php
     $alumniSocialNetworkSetting = $settingGateway->getSettingByScope('Alumni', 'socialNetworkLink');
     $alumniShowPublicSetting = $settingGateway->getSettingByScope('Alumni', 'showPublicRegistration');
 
-    $form = Form::create('action', $gibbon->session->get('absoluteURL').'/modules/'.$gibbon->session->get('module').'/alumni_settingsProcess.php');
+    $form = Form::create('action', $session->get('absoluteURL').'/modules/'.$session->get('module').'/alumni_settingsProcess.php');
 
-    $form->addHiddenValue('address', $gibbon->session->get('address'));
+    $form->addHiddenValue('address', $session->get('address'));
 
     $form->addRow()->addHeading(__m('Settings'));
 

@@ -128,7 +128,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
 
     $row = $form->addRow();
         $row->addLabel('gibbonPersonID', __m('Existing User'));
-        $row->addSelectUsers('gibbonPersonID', $gibbon->session->get('gibbonSchoolYearID'))->placeHolder();
+        $row->addSelectUsers('gibbonPersonID', $session->get('gibbonSchoolYearID'))->placeHolder();
 
     $row = $form->addRow();
         $row->addFooter();

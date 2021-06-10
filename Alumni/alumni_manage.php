@@ -31,10 +31,6 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 } else {
     $page->breadcrumbs->add(__m('Manage Alumni'));
 
-    if (isset($_GET['return'])) {
-        returnProcess($guid, $_GET['return'], null, null);
-    }
-
     $graduatingYear = $_GET['graduatingYear'] ?? '';
 
     $form = Form::create('search', $session->get('absoluteURL').'/index.php', 'get');
@@ -48,7 +44,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         $row->addSelect('graduatingYear')->fromArray(range(date('Y'), date('Y')-100, -1))->selected($graduatingYear)->placeholder();
 
     $row = $form->addRow();
-        $row->addSearchSubmit($gibbon->session, __m('Clear Search'));
+        $row->addSearchSubmit($session, __m('Clear Search'));
 
     echo $form->getOutput();
 
@@ -68,6 +64,55 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         ->addParam('graduatingYear', $graduatingYear)
         ->displayLabel();
 
+    $table->addExpandableColumn('details')->format(function ($alumniRow) {     
+        
+            $attributesDetails = [
+                'officialName' => __m('Official Name'),
+                'maidenName' => __m('Maiden Name'),
+                'gender' => __m('Gender'),
+                'username' => __m('Username'),
+                'dob' => __m('Date Of Birth'),
+                'address1Country' => __m('Country of Residence'),
+                'profession' => __m('Profession'),
+                'employer' => __m('Employer'),
+                'jobTitle' => __m('Job Title'),
+                'timestamp' => __m('Date Joined')
+            ];
+            
+            $arrayGender = [
+                'F'           => __('Female'),
+                'M'           => __('Male'),
+                'Other'       => __('Other'),
+                'Unspecified' => __('Unspecified')
+            ];
+            
+            $details = '';
+            
+            foreach ($attributesDetails as $attribute=>$label) {
+        
+                switch ($attribute){
+                    case 'dob':
+                    case 'timestamp':
+                        if (!empty($alumniRow[$attribute])) {
+                            $details .= Format::bold(__m($label).': ');
+                            $details .= Format::date($alumniRow[$attribute]).'<br/>';
+    
+                        }
+                        break;
+                    case 'gender':
+                        $details .= Format::bold(__m($label).': ');
+                        $details .= $arrayGender[$alumniRow[$attribute]].'<br/>';
+                        break;
+                    default:
+                        if (!empty($alumniRow[$attribute])) {
+                            $details .= Format::bold(__m($label).': ');
+                            $details .= $alumniRow[$attribute].'<br/>';
+                              }
+                }
+            }
+            return $details;
+        });
+
     $table->addColumn('name', __m('Name'))
             ->format(function ($person) {
                 return Format::name($person['title'], $person['firstName'], $person['surname'], 'Parent', false, false);
@@ -83,55 +128,6 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
             $actions->addAction('delete', __m('Delete'))
               ->setURL('/modules/Alumni/alumni_manage_delete.php');
           });
-    
-    $table->addExpandableColumn('details')->format(function ($alumniRow) {     
-        
-        $attributesDetails = [
-            'officialName' => __m('Official Name'),
-            'maidenName' => __m('Maiden Name'),
-            'gender' => __m('Gender'),
-            'username' => __m('Username'),
-            'dob' => __m('Date Of Birth'),
-            'address1Country' => __m('Country of Residence'),
-            'profession' => __m('Profession'),
-            'employer' => __m('Employer'),
-            'jobTitle' => __m('Job Title'),
-            'timestamp' => __m('Date Joined')
-        ];
-        
-        $arrayGender = [
-            'F'           => __('Female'),
-            'M'           => __('Male'),
-            'Other'       => __('Other'),
-            'Unspecified' => __('Unspecified')
-        ];
-        
-        $details = '';
-        
-        foreach ($attributesDetails as $attribute=>$label) {
-	
-            switch ($attribute){
-                case 'dob':
-                case 'timestamp':
-                    if (!empty($alumniRow[$attribute])) {
-                        $details .= Format::bold(__m($label).': ');
-                        $details .= Format::date($alumniRow[$attribute]).'<br/>';
-
-                    }
-                    break;
-                case 'gender':
-                    $details .= Format::bold(__m($label).': ');
-                    $details .= $arrayGender[$alumniRow[$attribute]].'<br/>';
-                    break;
-                default:
-                    if (!empty($alumniRow[$attribute])) {
-                        $details .= Format::bold(__m($label).': ');
-                        $details .= $alumniRow[$attribute].'<br/>';
-			              }
-            }
-        }
-        return $details;
-    });
 
     echo $table->render($alumnis);
     

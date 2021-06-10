@@ -54,15 +54,15 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
             $maidenName = $_POST['maidenName'] ?? '';
             $gender = $_POST['gender'] ?? '';
             $username = $_POST['username'] ?? '';
-            $dob = $_POST['dob'] ? Format::dateConvert($_POST['dob']) : '';
-            $email = $_POST['email'] ?? '';
+            $dob = !empty($_POST['dob']) ? Format::dateConvert($_POST['dob']) : null;
+            $email = $_POST['email'] ?? null;
             $address1Country = $_POST['address1Country'] ?? '';
             $profession = $_POST['profession'] ?? '';
             $employer = $_POST['employer'] ?? '';
             $jobTitle = $_POST['jobTitle'] ?? '';
-            $graduatingYear = $_POST['graduatingYear'] ?? '';
-            $formerRole = $_POST['formerRole'] ?? '';
-            $gibbonPersonID = $_POST['gibbonPersonID'] ?? '';
+            $graduatingYear = $_POST['graduatingYear'] ?? null;
+            $formerRole = $_POST['formerRole'] ?? null;
+            $gibbonPersonID = $_POST['gibbonPersonID'] ?? null;
 
             if (empty($surname) or empty($firstName) or empty($gender) or empty($email) or empty($formerRole)) {
                 //Fail 3
@@ -70,9 +70,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
                 header("Location: {$URL}");
             } else {
                 //Write to database
-                $fields = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole, 'gibbonPersonID' => $gibbonPersonID];
-                $dataAlumni = array_filter($fields, function($field) { return !empty($field[0]); });
-                
+                $dataAlumni = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole, 'gibbonPersonID' => $gibbonPersonID];
+
                 $alumniGateway->update($alumni['alumniAlumnusID'], $dataAlumni);
 
                 //Success 0
