@@ -93,3 +93,8 @@ UPDATE `gibbonSetting` SET `name` = 'socialNetworkLink' ,`nameDisplay` = 'Social
 INSERT INTO `gibbonAction` SET `name` = 'Alumni Settings', `precedence` = '0', `category` = 'Admin', `description` = 'Allows privileged users to manage all alumni settings.', `URLList` = 'alumni_settings.php', `entryURL` = 'alumni_settings.php', `defaultPermissionAdmin` = 'Y', `defaultPermissionTeacher` = 'N', `defaultPermissionStudent` = 'N', `defaultPermissionParent` = 'N', `defaultPermissionSupport` = 'N', `categoryPermissionStaff` = 'Y', `categoryPermissionStudent` = 'Y', `categoryPermissionParent` = 'Y', `categoryPermissionOther` = 'Y', `gibbonModuleID` = (SELECT `gibbonModuleID` FROM `gibbonModule` WHERE `name` = 'Alumni');end
 INSERT INTO `gibbonPermission` (`permissionID` ,`gibbonRoleID` ,`gibbonActionID`) VALUES (NULL , '1', (SELECT `gibbonActionID` FROM `gibbonAction` JOIN `gibbonModule` ON (`gibbonAction`.`gibbonModuleID` = `gibbonModule`.`gibbonModuleID`) WHERE `gibbonModule`.`name` = 'Alumni' AND `gibbonAction`.`name` = 'Alumni Settings'));end
 ";
+
+//v1.0.01
+++$count;
+$sql[$count][0] = "1.0.01";
+$sql[$count][1] = "";

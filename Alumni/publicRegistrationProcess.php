@@ -19,12 +19,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use Gibbon\Services\Format;
 use Gibbon\Module\Alumni\AlumniGateway;
+use Gibbon\Domain\System\SettingGateway;
 
 include '../../gibbon.php';
 
 $URL = $session->get('absoluteURL').'/index.php?q=/modules/Alumni/publicRegistration.php';
 
-$enablePublicRegistration = getSettingByScope($connection2, 'Alumni', 'showPublicRegistration');
+$settingGateway = $container->get(SettingGateway::class);
+$enablePublicRegistration = $settingGateway->getSettingByScope('Alumni', 'showPublicRegistration');
 $loggedIn = $session->has('username');
 
 if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && !empty($loggedIn))) {
@@ -54,7 +56,7 @@ if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && !empty($lo
         header("Location: {$URL}");
     } else {
         //Check publicRegistrationMinimumAge
-        $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
+        $publicRegistrationMinimumAge = $settingGateway->getSettingByScope('User Admin', 'publicRegistrationMinimumAge');
 
         if (empty($publicRegistrationMinimumAge)) {
             $ageFail = true;

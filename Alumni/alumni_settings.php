@@ -28,10 +28,6 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php
     $page->addError(__m('You do not have access to this action.'));
 } else {
     $page->breadcrumbs->add(__m('Alumni Settings'));
-
-    if (isset($_GET['return'])) {
-        returnProcess($guid, $_GET['return'], null, null);
-    }
     
     $settingGateway = $container->get(SettingGateway::class);
     $alumniSocialNetworkSetting = $settingGateway->getSettingByScope('Alumni', 'socialNetworkLink');

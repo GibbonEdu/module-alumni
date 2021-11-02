@@ -32,10 +32,6 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_delet
       ->add(__m('Manage Alumni'), 'alumni_manage.php')
       ->add(__m('Delete'));
 
-    if (isset($_GET['return'])) {
-        returnProcess($guid, $_GET['return'], null, null);
-    }
-
     //Check if alumniAlumnusID specified
     $alumniAlumnusID = $_GET['alumniAlumnusID'] ?? '';
     $graduatingYear = $_GET['graduatingYear'] ?? '';

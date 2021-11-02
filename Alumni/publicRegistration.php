@@ -24,7 +24,7 @@ use Gibbon\Domain\System\SettingGateway;
 
 $settingGateway = $container->get(SettingGateway::class);
 $enablePublicRegistration = $settingGateway->getSettingByScope('Alumni', 'showPublicRegistration');
-    
+
 $loggedIn = $session->has('username');
 
 if ($enablePublicRegistration != "Y") {
@@ -40,7 +40,7 @@ else {
         'orgName' => $session->get('organisationNameShort') ?? ''
     ]));
 
-    $publicRegistrationMinimumAge = getSettingByScope($connection2, 'User Admin', 'publicRegistrationMinimumAge');
+    $publicRegistrationMinimumAge = $settingGateway->getSettingByScope('User Admin', 'publicRegistrationMinimumAge');
 
     $returns = [];
     $returns['error5'] = __m('Your request failed because you do not meet the minimum age for joining this site ({minimumAge} years of age).', ['minimumAge' => $publicRegistrationMinimumAge]);
@@ -50,16 +50,15 @@ else {
     if (isset($_GET['editID'])) {
         $editLink = $session->get('absoluteURL').'/index.php?q=/modules/User Admin/user_manage_edit.php&gibbonPersonID='.$_GET['editID'].'&search='.$_GET['search'];
     }
-    if (isset($_GET['return'])) {
-        returnProcess($guid, $_GET['return'], $editLink, $returns);
-    }
+    $page->return->setEditLink($editLink);
+    $page->return->addReturns($returns);
 
-    $page->write(__m("This registration form is for former members of the {orgName} community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.", 
+    $page->write(__m("This registration form is for former members of the {orgName} community who wish to reconnect. Please fill in your details here, and someone from our alumni team will get back to you.",
     ['orgName' => $session->get('organisationNameShort')]));
-    
+
     $socialNetworkLink = $settingGateway->getSettingByScope('Alumni', 'socialNetworkLink');
     if (!empty($socialNetworkLink)) {
-        $page->write(__m("Please don't forget to take a look at, and like, our {socialNetworkLink}", 
+        $page->write(__m("Please don't forget to take a look at, and like, our {socialNetworkLink}",
                 ['socialNetworkLink' => Format::link($socialNetworkLink, __m('alumni Social Network page'), ['target' => '_blank'])]));
     }
 

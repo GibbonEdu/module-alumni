@@ -1,8 +1,12 @@
 CHANGELOG
 =========
+v1.0.01
+-------
+Removed deprecated function calls
+
 v1.0.00
 -------
-Refatored code
+Refactored code
 Support to multilanguage
 Changed setting/link Facebook page to Social Network page
 Settings Social Network link and Show Public Registration in the interface.

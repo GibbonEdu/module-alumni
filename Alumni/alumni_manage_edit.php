@@ -33,10 +33,6 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
       ->add(__m('Manage Alumni'), 'alumni_manage.php')
       ->add(__m('Edit'));
 
-    if (isset($_GET['return'])) {
-        returnProcess($guid, $_GET['return'], null, null);
-    }
-
     $graduatingYear = $_GET['graduatingYear'] ?? '';
     $alumniAlumnusID = $_GET['alumniAlumnusID'] ?? '';
 
