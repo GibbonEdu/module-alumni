@@ -98,3 +98,10 @@ INSERT INTO `gibbonPermission` (`permissionID` ,`gibbonRoleID` ,`gibbonActionID`
 ++$count;
 $sql[$count][0] = "1.0.01";
 $sql[$count][1] = "";
+
+//v1.0.02
+++$count;
+$sql[$count][0] = "1.0.02";
+$sql[$count][1] = "
+ALTER TABLE `alumniAlumnus` ADD `fields` TEXT NULL AFTER `timestamp`;end
+";

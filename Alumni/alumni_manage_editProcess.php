@@ -18,6 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 use Gibbon\Services\Format;
 use Gibbon\Module\Alumni\AlumniGateway;
+use Gibbon\Forms\CustomFieldHandler;
 
 include '../../gibbon.php';
 
@@ -69,8 +70,17 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
                 $URL .= '&return=error3';
                 header("Location: {$URL}");
             } else {
+                $customRequireFail = false;
+                $fields = $container->get(CustomFieldHandler::class)->getFieldDataFromPOST('Alumni', [], $customRequireFail);
+
+                if ($customRequireFail) {
+                    $URL .= '&return=error1';
+                    header("Location: {$URL}");
+                    exit;
+                }
+
                 //Write to database
-                $dataAlumni = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole, 'gibbonPersonID' => $gibbonPersonID];
+                $dataAlumni = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole, 'gibbonPersonID' => $gibbonPersonID, 'fields' => $fields];
 
                 $alumniGateway->update($alumni['alumniAlumnusID'], $dataAlumni);
 

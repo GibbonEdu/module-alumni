@@ -21,6 +21,7 @@ use Gibbon\Forms\Form;
 use Gibbon\Services\Format;
 use Gibbon\Forms\DatabaseFormFactory;
 use Gibbon\Domain\System\SettingGateway;
+use Gibbon\Forms\CustomFieldHandler;
 
 $settingGateway = $container->get(SettingGateway::class);
 $enablePublicRegistration = $settingGateway->getSettingByScope('Alumni', 'showPublicRegistration');
@@ -86,7 +87,7 @@ else {
         $row->addTextField('officialName')->isRequired()->maxLength(150);
 
     $row = $form->addRow();
-        $row->addLabel('email', __m('Email'));
+        $row->addLabel('email', __m('Email'))->description(__m('Your current non-school email.'));
         $email = $row->addEmail('email')->isRequired()->maxLength(50);
 
     $row = $form->addRow();
@@ -154,6 +155,9 @@ else {
             $row->addLabel('agreement', __m('Do you agree to the above?'));
             $row->addCheckbox('agreement')->isRequired()->description(__m('Yes'));
     }
+
+    // Custom Fields
+    $container->get(CustomFieldHandler::class)->addCustomFieldsToForm($form, 'Alumni', []);
 
     $row = $form->addRow();
         $row->addFooter();

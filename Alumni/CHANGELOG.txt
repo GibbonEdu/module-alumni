@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v1.0.02
+-------
+Enabled custom fields for Alumni records
+
 v1.0.01
 -------
 Removed deprecated function calls

@@ -20,6 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 use Gibbon\Forms\Form;
 use Gibbon\Forms\DatabaseFormFactory;
 use Gibbon\Module\Alumni\AlumniGateway;
+use Gibbon\Forms\CustomFieldHandler;
 
 //Module includes
 include './modules/'.$session->get('module').'/moduleFunctions.php';
@@ -78,7 +79,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
                 $row->addTextField('officialName')->maxLength(150);
 
             $row = $form->addRow();
-                $row->addLabel('email', __m('Email'));
+                $row->addLabel('email', __m('Email'))->description(__m('Your current non-school email.'));
                 $email = $row->addEmail('email')->isRequired()->maxLength(50);
 
             $row = $form->addRow();
@@ -133,7 +134,10 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
           
             $row = $form->addRow();
                 $row->addLabel('gibbonPersonID', __m('Existing User'));
-                $row->addSelectUsers('gibbonPersonID', $session->get('gibbonSchoolYearID'))->placeholder();
+                $row->addSelectUsers('gibbonPersonID')->placeholder();
+
+            // Custom Fields
+            $container->get(CustomFieldHandler::class)->addCustomFieldsToForm($form, 'Alumni', [], $alumni['fields'] ?? '');
 
             $row = $form->addRow();
                 $row->addFooter();
