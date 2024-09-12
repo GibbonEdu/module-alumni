@@ -105,3 +105,10 @@ $sql[$count][0] = "1.0.02";
 $sql[$count][1] = "
 ALTER TABLE `alumniAlumnus` ADD `fields` TEXT NULL AFTER `timestamp`;end
 ";
+
+//v1.1.00
+++$count;
+$sql[$count][0] = "1.1.00";
+$sql[$count][1] = "
+UPDATE gibbonModule SET author='Gibbon Foundation', url='https://gibbonedu.org' WHERE name='Free Learning';end
+";
