@@ -27,7 +27,7 @@ $description = "The Alumni module allows schools to accept alumni registrations,
 $entryURL = "alumni_manage.php";
 $type = "Additional";
 $category = "People";
-$version = "1.1.02";
+$version = "1.1.03";
 $author = "Gibbon Foundation";
 $url = "https://gibbonedu.org";
 
@@ -37,6 +37,7 @@ $moduleTables[0] = "CREATE TABLE `alumniAlumnus` (  `alumniAlumnusID` int(10) un
 //Settings
 $gibbonSetting[0] = "INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'showPublicRegistration', 'Show Public Registration', 'Should the alumni registration form be displayed on the school\'s Gibbon homepage, or available via a link only?.', 'Y');";
 $gibbonSetting[1] = "INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'socialNetworkLink', 'Social Network Link', 'A URL pointing to a Social Network page for the school\'s alumni group.', '');";
+$gibbonSetting[2] = "INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'privacyPolicyLink', 'Privacy Policy Link', 'A URL pointing to the school\'s privacy policy.', '');";
 
 //Action rows
 $actionRows[0]['name'] = "Manage Alumni";

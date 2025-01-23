@@ -37,7 +37,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 
     $form = Form::create('search', $session->get('absoluteURL').'/index.php', 'get');
     $form->setTitle(__m('Filter'));
-    $form->setClass('noIntBorder fullWidth');
+    $form->setClass('noIntBorder w-full');
 
     $form->addHiddenValue('q', '/modules/'.$session->get('module').'/alumni_manage.php');
 
@@ -103,7 +103,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
                         break;
                     case 'gender':
                         $details .= Format::bold(__m($label).': ');
-                        $details .= $arrayGender[$alumniRow[$attribute]].'<br/>';
+                        $details .= ($arrayGender[$alumniRow[$attribute]] ?? '').'<br/>';
                         break;
                     default:
                         if (!empty($alumniRow[$attribute])) {

@@ -32,6 +32,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php
     $page->breadcrumbs->add(__m('Alumni Settings'));
     
     $settingGateway = $container->get(SettingGateway::class);
+    
     $alumniSocialNetworkSetting = $settingGateway->getSettingByScope('Alumni', 'socialNetworkLink');
     $alumniShowPublicSetting = $settingGateway->getSettingByScope('Alumni', 'showPublicRegistration');
 
@@ -40,6 +41,11 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php
     $form->addHiddenValue('address', $session->get('address'));
 
     $form->addRow()->addHeading(__m('Settings'));
+
+    $setting = $settingGateway->getSettingByScope('Alumni', 'privacyPolicyLink', true);
+    $row = $form->addRow();
+        $row->addLabel($setting['name'], __($setting['nameDisplay']))->description(__($setting['description']));
+        $row->addURL($setting['name'])->setValue($setting['value'])->maxLength(100);
 
     $row = $form->addRow();
         $row->addLabel('socialNetworkLink', __m('Social Network Link'))

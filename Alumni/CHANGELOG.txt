@@ -1,5 +1,9 @@
 CHANGELOG
 =========
+v1.1.03
+-------
+Added a Privacy Policy link to settings
+
 v1.1.02
 -------
 Fixed JS bug introduced in ownership transfer

@@ -65,6 +65,12 @@ else {
                 ['socialNetworkLink' => Format::link($socialNetworkLink, __m('alumni Social Network page'), ['target' => '_blank'])]));
     }
 
+    $privacyPolicyLink = $settingGateway->getSettingByScope('Alumni', 'privacyPolicyLink');
+    if (!empty($privacyPolicyLink)) {
+        $page->write('<br/><br/>'.__m("Prior to completing the application form, please read our {privacyPolicyLink}",
+                ['privacyPolicyLink' => Format::link($privacyPolicyLink, __m('Statement on Collection of Personal Data'), ['target' => '_blank'])]));
+    }
+
     $form = Form::create('action', $session->get('absoluteURL').'/modules/Alumni/publicRegistrationProcess.php');
     $form->setFactory(DatabaseFormFactory::create($pdo));
 

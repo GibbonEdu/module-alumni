@@ -37,9 +37,14 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_settings.php
         $URL .= '&return=error1';
         header("Location: {$URL}");
     } else {
-        $socialNetworkLink = $_POST['socialNetworkLink'] ?? '';
+        $privacyPolicyLink = filter_var($_POST['privacyPolicyLink'] ?? '', FILTER_SANITIZE_URL);
+        $socialNetworkLink = filter_var($_POST['socialNetworkLink'] ?? '', FILTER_SANITIZE_URL);
         $showPublicRegistration = $_POST['showPublicRegistration'] ?? 'N';
         
+        if (!empty($privacyPolicyLink)) {
+            $settingGateway->updateSettingByScope('Alumni', 'privacyPolicyLink', $privacyPolicyLink);
+        }
+
         if (!empty($socialNetworkLink)) {
             $settingGateway->updateSettingByScope('Alumni', 'socialNetworkLink', $socialNetworkLink);
         }

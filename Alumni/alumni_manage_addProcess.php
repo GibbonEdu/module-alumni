@@ -45,7 +45,7 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
     $gender = $_POST['gender'] ?? '';
     $username = $_POST['username2'] ?? '';
     $dob = !empty($_POST['dob']) ? Format::dateConvert($_POST['dob']) : null;
-    $email = $_POST['email'] ?? null;
+    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
     $address1Country = $_POST['address1Country'] ?? '';
     $profession = $_POST['profession'] ?? '';
     $employer = $_POST['employer'] ?? '';
