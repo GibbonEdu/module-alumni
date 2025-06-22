@@ -53,7 +53,8 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
 
     $gatewayAlumni = $container->get(AlumniGateway::class);
     $criteria = $gatewayAlumni->newQueryCriteria(true)
-        ->sortBy('timestamp');
+        ->sortBy('timestamp')
+        ->fromPOST();
 
     $alumnis = $gatewayAlumni->queryAlumniAlumnusByGraduationYear($criteria, $graduatingYear);
 
@@ -116,9 +117,10 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage.php')
         });
 
     $table->addColumn('name', __m('Name'))
-            ->format(function ($person) {
-                return Format::name($person['title'], $person['firstName'], $person['surname'], 'Parent', false, false);
-    });
+        ->sortable(['surname', 'firstName'])
+        ->format(function ($person) {
+            return Format::name($person['title'], $person['firstName'], $person['surname'], 'Parent', false, false);
+        });
     $table->addColumn('email', __m('Email'));
     $table->addColumn('graduatingYear', __m('Graduating Year'));
 

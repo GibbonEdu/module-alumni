@@ -127,3 +127,8 @@ $sql[$count][1] = "";
 ++$count;
 $sql[$count][0] = "1.1.03";
 $sql[$count][1] = "INSERT INTO `gibbonSetting` (`gibbonSettingID` ,`scope` ,`name` ,`nameDisplay` ,`description` ,`value`) VALUES (NULL , 'Alumni', 'privacyPolicyLink', 'Privacy Policy Link', 'A URL pointing to the school\'s privacy policy.', '');end";
+
+//v1.1.04
+++$count;
+$sql[$count][0] = "1.1.04";
+$sql[$count][1] = "";
