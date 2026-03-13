@@ -27,7 +27,7 @@ $description = "The Alumni module allows schools to accept alumni registrations,
 $entryURL = "alumni_manage.php";
 $type = "Additional";
 $category = "People";
-$version = "1.1.04";
+$version = "1.1.05";
 $author = "Gibbon Foundation";
 $url = "https://gibbonedu.org";
 
