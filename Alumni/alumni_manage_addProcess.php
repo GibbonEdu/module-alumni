@@ -73,10 +73,15 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_add.p
         //Write to database
         $dataAlumni = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole, 'gibbonPersonID' => $gibbonPersonID, 'fields' => $fields];
 
-        $AI = $alumniGateway->insertAndUpdate($dataAlumni, $dataAlumni);
+        $alumniAlumnusID = $alumniGateway->insertAndUpdate($dataAlumni, $dataAlumni);
+
+        // Manage custom field file uploads
+        if (!empty($fields)) {
+            $container->get(CustomFieldHandler::class)->manageCustomFieldFileUploads('Alumni', [], $fields, 'alumniAlumnus', $alumniAlumnusID);
+        }
 
         //Success 0
-        $URL .= '&return=success0&editID='.$AI;
+        $URL .= '&return=success0&editID='.$alumniAlumnusID;
         header("Location: {$URL}");
     }
 }

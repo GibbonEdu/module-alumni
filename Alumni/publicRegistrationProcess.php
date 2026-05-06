@@ -99,7 +99,12 @@ if ($enablePublicRegistration != "Y" || ($enablePublicRegistration && !empty($lo
                 $data = ['title' => $title, 'surname' => $surname, 'firstName' => $firstName, 'officialName' => $officialName, 'maidenName' => $maidenName, 'gender' => $gender, 'username' => $username, 'dob' => $dob, 'email' => $email, 'address1Country' => $address1Country, 'profession' => $profession, 'employer' => $employer, 'jobTitle' => $jobTitle, 'graduatingYear' => $graduatingYear, 'formerRole' => $formerRole, 'fields' => $fields];
                 $dataAlumni = array_filter($data, function($field) { return !empty($field[0]); });
                 
-                $alumniGateway->insert($dataAlumni);
+                $alumniAlumnusID = $alumniGateway->insert($dataAlumni);
+
+                // Manage custom field file uploads
+                if (!empty($fields)) {
+                    $container->get(CustomFieldHandler::class)->manageCustomFieldFileUploads('Alumni', [], $fields, 'alumniAlumnus', $alumniAlumnusID);
+                }
 
                 //Success 0
                 $URL .= '&return=success0';

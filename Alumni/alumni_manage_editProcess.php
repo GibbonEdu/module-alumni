@@ -86,6 +86,11 @@ if (isActionAccessible($guid, $connection2, '/modules/Alumni/alumni_manage_edit.
 
                 $alumniGateway->update($alumni['alumniAlumnusID'], $dataAlumni);
 
+                // Manage custom field file uploads
+                if (!empty($fields)) {
+                    $container->get(CustomFieldHandler::class)->manageCustomFieldFileUploads('Alumni', [], $fields, 'alumniAlumnus', $alumni['alumniAlumnusID'], $alumni['fields'] ?? null);
+                }
+
                 //Success 0
                 $URL .= '&return=success0';
                 header("Location: {$URL}");
